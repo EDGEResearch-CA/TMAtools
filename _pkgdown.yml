@@ -1,4 +1,6 @@
-url: ~
+home:
+  title: "TMAtools"
+  logo: man/figures/logo.png
 template:
   bootstrap: 5
 
