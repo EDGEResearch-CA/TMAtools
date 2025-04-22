@@ -3,4 +3,7 @@ home:
   logo: man/figures/logo.png
 template:
   bootstrap: 5
+  bslib:
+    bootswatch: pulse
+    pkgdown-nav-height: 100px
 
