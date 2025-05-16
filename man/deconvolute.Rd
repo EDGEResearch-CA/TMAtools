@@ -22,7 +22,7 @@ columns for each biomarker as necessary.
 
 For instance, if core ID 1 has 3 values for biomarker A,
 the output will contain 3 columns for biomarker A
-(A.c1, A.c2, A.c3); if another code ID has 2 values for
+(A.c1, A.c2, A.c3); if another core ID has 2 values for
 biomaker A, its corresponding A.c1 and A.c2 columns will
 be filled with the values for that core ID and the
 A.c3 column will be filled with NA.
