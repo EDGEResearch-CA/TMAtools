@@ -16,11 +16,11 @@ Documentation and examples on the package website at [edgeresearch-ca.github.io/
 
 ## Installation
 
-You can install the development version of TMAtools from [GitHub](https://github.com/) with:
+You can install the development version of TMAtools from [GitHub](https://github.com/EDGEResearch-CA/TMAtools) with:
 
 ``` r
-# install.packages("pak")
-pak::pak("EDGEResearch-CA/TMAtools")
+# install.packages("remotes")
+remotes::install_github("EDGEResearch-CA/TMAtools")
 ```
 
 ## Example
