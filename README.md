@@ -8,11 +8,11 @@
 
 The goal of TMAtools is to facilitate the efficient and reproducible analysis of TMA data.
 
-Full documentation with examples on the package website at [https://edgeresearch-ca.github.io/TMAtools](https://edgeresearch-ca.github.io/TMAtools/).
+Documentation and examples on the package website at [edgeresearch-ca.github.io/TMAtools](https://edgeresearch-ca.github.io/TMAtools/).
 
 ## Overview
 
-![TMAtools overview fig.](man/figures/TMAtools overview.png)
+![TMAtools overview fig.](man/figures/TMAtoolsoverview.png)
 
 ## Installation
 
