@@ -1,12 +1,14 @@
 Package: TMAtools
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Tissue Microarray (TMA) data processing and integration at scale.
+Version: 1.0.1
 Authors@R: c(
     person("Bianca", "Ribeiro de Souza", , "bianca.ribeiro@ubc.ca", role = c("aut", "cre")),
     person(, "Endometriosis Oncogenomics and Pathology Research Lab", role = c("cph", "fnd")),
     person("Giuliano", "Netto Flores Cruz", role = "ctb")
   )
-Description: What the package does (one paragraph).
+Description: TMAtools facilitates the processing and integration of Tissue Microarray (TMA) data at scale.
+URL: https://edgeresearch-ca.github.io/TMAtools, https://github.com/EDGEResearch-CA/TMAtools, https://zenodo.org/records/15447779
+BugReports: https://github.com/EDGEResearch-CA/TMAtools/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
