@@ -1,13 +1,13 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/LICENSE.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/reference/combine_tma_spreadsheets.html</loc></url>
-<url><loc>/reference/deconvolute.html</loc></url>
-<url><loc>/reference/get_default_dict.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/tmatools.html</loc></url>
-<url><loc>/reference/translate_and_consolidate_scores.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/404.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/LICENSE.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/authors.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/index.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/reference/combine_tma_spreadsheets.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/reference/deconvolute.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/reference/get_default_dict.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/reference/index.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/reference/tmatools.html</loc></url>
+<url><loc>https://edgeresearch-ca.github.io/tmatools/reference/translate_and_consolidate_scores.html</loc></url>
 </urlset>
 
