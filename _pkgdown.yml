@@ -7,4 +7,13 @@ template:
   bslib:
     bootswatch: pulse
     pkgdown-nav-height: 100px
-
+navbar:
+  structure:
+    left:  [reference, edgelab]
+    right: [search, github, lightswitch]
+  components:
+    edgelab:
+      text: "EDGE Research Lab"
+      href: https://www.edgeresearch.ca
+      target: _blank
+      icon: fa-microscope
