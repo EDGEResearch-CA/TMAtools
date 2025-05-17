@@ -4,13 +4,16 @@
 \alias{deconvolute}
 \title{Deconvolute TMA map}
 \usage{
-deconvolute(input_path)
+deconvolute(tma_file, output_file = NULL)
 }
 \arguments{
-\item{input_path}{Path to input Excel spreadsheet.
+\item{tma_file}{Path to input Excel spreadsheet.
 Both .xlsx and .xls formats are supported.
 Must contain one "TMA map" sheet and one or more
 biomarker-specific sheets.}
+
+\item{output_file}{Optional path to output
+Excel spreadsheet.}
 }
 \value{
 A data frame with the deconvoluted data.
@@ -32,13 +35,13 @@ biomarker-specific sheet, the corresponding
 columns will all be filled with NA.
 }
 \description{
-Reads TMA spreadsheet from \code{input_path}
+Reads TMA spreadsheet from \code{tma_file}
 which must contain one "TMA map" sheet and one or more
 biomaker-specific sheets.
 }
 \examples{
 library(TMAtools)
-input_path <- system.file("extdata", "example.xlsx", package = "TMAtools")
-deconvoluted_data <- deconvolute(input_path)
+tma_file <- system.file("extdata", "example.xlsx", package = "TMAtools")
+deconvoluted_data <- deconvolute(tma_file)
 head(deconvoluted_data)
 }

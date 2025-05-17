@@ -76,6 +76,10 @@ combine_tma_spreadsheets <- function(
         
     }
 
+    message(
+        "Using TMA map from the file: ",
+        tma_files[[1]]
+    )
     data_list <- c(
         list("TMA map" = tma_map_data_list[[1]]),
         biomarker_data_list

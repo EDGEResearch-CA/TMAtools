@@ -1,44 +1,46 @@
 #' @title Deconvolute TMA map
-#' @param input_path Path to input Excel spreadsheet.
+#' @param tma_file Path to input Excel spreadsheet.
 #' Both .xlsx and .xls formats are supported.
 #' Must contain one "TMA map" sheet and one or more
 #' biomarker-specific sheets.
-#' @description Reads TMA spreadsheet from `input_path`
+#' @param output_file Optional path to output
+#' Excel spreadsheet.
+#' @description Reads TMA spreadsheet from `tma_file`
 #' which must contain one "TMA map" sheet and one or more
 #' biomaker-specific sheets.
-#' 
+#'
 #' @return A data frame with the deconvoluted data.
 #' The function will
 #' match core IDs from the TMA map sheet
 #' with the biomarker-specific sheets and return a
 #' data frame with a "core_id" column and as many
 #' columns for each biomarker as necessary.
-#' 
+#'
 #' For instance, if core ID 1 has 3 values for biomarker A,
 #' the output will contain 3 columns for biomarker A
 #' (A.c1, A.c2, A.c3); if another core ID has 2 values for
 #' biomaker A, its corresponding A.c1 and A.c2 columns will
 #' be filled with the values for that core ID and the
 #' A.c3 column will be filled with NA.
-#' 
+#'
 #' If there are no values for a given core ID in a
 #' biomarker-specific sheet, the corresponding
 #' columns will all be filled with NA.
 #' @export
 #' @examples
 #' library(TMAtools)
-#' input_path <- system.file("extdata", "example.xlsx", package = "TMAtools")
-#' deconvoluted_data <- deconvolute(input_path)
+#' tma_file <- system.file("extdata", "example.xlsx", package = "TMAtools")
+#' deconvoluted_data <- deconvolute(tma_file)
 #' head(deconvoluted_data)
-deconvolute <- function(input_path) {
-    sheet_names <- readxl::excel_sheets(input_path)
+deconvolute <- function(tma_file, output_file = NULL) {
+    sheet_names <- readxl::excel_sheets(tma_file)
     if (!"TMA map" %in% sheet_names) {
         stop("The input spreadsheet must contain a 'TMA map' sheet.")
     }
     spreadsheets <- lapply(
-        readxl::excel_sheets(input_path),
+        readxl::excel_sheets(tma_file),
         readxl::read_excel,
-        path = input_path,
+        path = tma_file,
         col_types = "text",
         col_names = FALSE,
         .name_repair = "minimal"
@@ -83,7 +85,6 @@ deconvolute <- function(input_path) {
             }
             results[[core_id]][[biomarker_name]] <- list(biomarker_values)
         }
-
     }
     deconvoluted_results <- dplyr::bind_rows(results, .id = "core_id") |>
         tidyr::pivot_longer(
@@ -104,11 +105,25 @@ deconvolute <- function(input_path) {
             lapply(
                 biomarker_names,
                 function(b) {
-                    sort(grep(paste0("^", b, "\\.c[0-9]+$"), col_names, value = TRUE))
+                    sort(grep(
+                        paste0("^", b, "\\.c[0-9]+$"),
+                        col_names,
+                        value = TRUE
+                    ))
                 }
             )
         )
     )
 
-    return(deconvoluted_results[, ordered_cols])
+    deconvoluted_results <- deconvoluted_results[, ordered_cols]
+
+    if (!is.null(output_file)) {
+        writexl::write_xlsx(
+            deconvoluted_results,
+            path = output_file,
+            col_names = TRUE
+        )
+        return(invisible(deconvoluted_results))
+    }
+    return(deconvoluted_results)
 }
