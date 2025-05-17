@@ -6,9 +6,9 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15447743.svg)](https://doi.org/10.5281/zenodo.15447743)
 <!-- badges: end -->
 
-The goal of TMAtools is to facilitate the efficient and reproducible analysis of TMA data.
+The goal of TMAtools is to facilitate the efficient and reproducible processing and integration of TMA data at scale.
 
-Documentation and examples on the package website at [edgeresearch-ca.github.io/TMAtools](https://edgeresearch-ca.github.io/TMAtools/).
+Documentation and examples are available at [edgeresearch-ca.github.io/TMAtools](https://edgeresearch-ca.github.io/TMAtools/).
 
 ## Overview
 
