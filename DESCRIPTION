@@ -3,7 +3,8 @@ Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: c(
     person("Bianca", "Ribeiro de Souza", , "bianca.ribeiro@ubc.ca", role = c("aut", "cre")),
-    person(, "Endometriosis Oncogenomics and Pathology Research Lab", role = c("cph", "fnd"))
+    person(, "Endometriosis Oncogenomics and Pathology Research Lab", role = c("cph", "fnd")),
+    person("Giuliano", "Netto Flores Cruz", role = "ctb")
   )
 Description: What the package does (one paragraph).
 License: GPL (>= 3)

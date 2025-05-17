@@ -3,13 +3,14 @@
 #' @param biomarkers_file Path to the Excel file containing biomarker data.
 #' @param required_biomarkers A vector of required biomarkers. If NULL, default biomarkers are used.
 #' @param get_dict A function that returns a dictionary for translating numerical scores to nominal scores. If NULL, a default function is used.
+#' @param output_file Optional path to the output file. If NULL, the function will not save the output.
 #' @return A data frame with consolidated biomarker scores and MMR status.
 #' @seealso \code{\link{get_default_dict}} for the default dictionary function.
 #' @export
 #' @examples
 #' library(TMAtools)
 #' # grab folder with example TMA datasets
-#' tmadir <- system.file("extdata", "tmadir", package = "TMAtools")
+#' tma_dir <- system.file("extdata", "tma1", package = "TMAtools")
 #' # define output files
 #' combined_tma_file <- "combined_tma.xlsx"
 #' deconvoluted_tma_file <- "deconvoluted_tma.xlsx"
@@ -17,7 +18,7 @@
 #'
 #' # combine TMA datasets
 #' combine_tma_spreadsheets(
-#'  tma_dir = tmadir,
+#'  tma_dir = tma_dir,
 #'  output_file = combined_tma_file
 #' )
 #'
@@ -37,7 +38,8 @@
 translate_and_consolidate_scores <- function(
   biomarkers_file,
   required_biomarkers = NULL,
-  get_dict = NULL
+  get_dict = NULL,
+  output_file = NULL
 ) {
   ## Define required biomarkers (17) for analyses 2025
 
@@ -362,6 +364,13 @@ translate_and_consolidate_scores <- function(
           return("intact")
         }
       }
+    )
+  }
+
+  if (!is.null(output_file)) {
+    writexl::write_xlsx(
+      biomarkers_data,
+      output_file
     )
   }
 

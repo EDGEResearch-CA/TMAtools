@@ -1,5 +1,5 @@
 #' @title Combine TMA spreadsheets
-#' @description 
+#' @description
 #' This function combines multiple TMA spreadsheets into a single spreadsheet
 #' that can be used for deconvolution with `TMAtools::deconvolute()`.
 #' @param tma_dir The directory containing the TMA spreadsheets.
@@ -30,6 +30,8 @@ combine_tma_spreadsheets <- function(
         pattern = "\\.xls[x]?$",
         full.names = TRUE
     )
+    # filter out metadata files
+    tma_files <- tma_files[!grepl("metadata", tma_files, ignore.case = TRUE)]
 
     biomarker_sheet_names <- sapply(
         tma_files,
@@ -54,7 +56,7 @@ combine_tma_spreadsheets <- function(
         file_path <- tma_files[[i]]
         biomarker_sheet_name <- biomarker_sheet_names[[i]]
         tma_map_sheet_name <- tma_map_sheet_names[[i]]
-        
+
         # Read the biomarker sheet
         biomarker_data_list[[biomarker_sheet_name]] <- readxl::read_excel(
             file_path,
@@ -73,7 +75,6 @@ combine_tma_spreadsheets <- function(
             col_types = "text",
             .name_repair = "minimal"
         )
-        
     }
 
     message(
@@ -84,13 +85,15 @@ combine_tma_spreadsheets <- function(
         list("TMA map" = tma_map_data_list[[1]]),
         biomarker_data_list
     )
-    
-    writexl::write_xlsx(
-        data_list,
-        output_file,
-        col_names = FALSE,
-        format_headers = FALSE
-    )
+
+    if (!is.null(output_file)) {
+        writexl::write_xlsx(
+            data_list,
+            output_file,
+            col_names = FALSE,
+            format_headers = FALSE
+        )
+    }
 
     return(invisible(data_list))
 }

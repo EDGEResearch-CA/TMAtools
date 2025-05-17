@@ -7,7 +7,8 @@
 translate_and_consolidate_scores(
   biomarkers_file,
   required_biomarkers = NULL,
-  get_dict = NULL
+  get_dict = NULL,
+  output_file = NULL
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ translate_and_consolidate_scores(
 \item{required_biomarkers}{A vector of required biomarkers. If NULL, default biomarkers are used.}
 
 \item{get_dict}{A function that returns a dictionary for translating numerical scores to nominal scores. If NULL, a default function is used.}
+
+\item{output_file}{Optional path to the output file. If NULL, the function will not save the output.}
 }
 \value{
 A data frame with consolidated biomarker scores and MMR status.
@@ -26,7 +29,7 @@ This function translates numerical scores of biomarkers to nominal scores and co
 \examples{
 library(TMAtools)
 # grab folder with example TMA datasets
-tmadir <- system.file("extdata", "tmadir", package = "TMAtools")
+tma_dir <- system.file("extdata", "tma1", package = "TMAtools")
 # define output files
 combined_tma_file <- "combined_tma.xlsx"
 deconvoluted_tma_file <- "deconvoluted_tma.xlsx"
@@ -34,7 +37,7 @@ consolidated_tma_file <- "consolidated_tma.xlsx"
 
 # combine TMA datasets
 combine_tma_spreadsheets(
- tma_dir = tmadir,
+ tma_dir = tma_dir,
  output_file = combined_tma_file
 )
 
