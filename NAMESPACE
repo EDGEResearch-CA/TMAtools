@@ -2,5 +2,5 @@
 
 export(combine_tma_spreadsheets)
 export(deconvolute)
-export(get_leopard_dict)
+export(get_default_dict)
 export(translate_and_consolidate_scores)

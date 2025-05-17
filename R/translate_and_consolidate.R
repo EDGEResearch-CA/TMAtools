@@ -4,7 +4,7 @@
 #' @param required_biomarkers A vector of required biomarkers. If NULL, default biomarkers are used.
 #' @param get_dict A function that returns a dictionary for translating numerical scores to nominal scores. If NULL, a default function is used.
 #' @return A data frame with consolidated biomarker scores and MMR status.
-#' @seealso \code{\link{get_leopard_dict}} for the default dictionary function.
+#' @seealso \code{\link{get_default_dict}} for the default dictionary function.
 #' @export
 #' @examples
 #' library(TMAtools)
@@ -66,7 +66,7 @@ translate_and_consolidate_scores <- function(
   ## Dictionary of biomarkers to replace numerical scores with nominal scores ----
   # MK scoring system reviewed in 2025
   if (is.null(get_dict) || !is.function(get_dict)) {
-    get_dict <- get_leopard_dict
+    get_dict <- get_default_dict
   }
 
   # Harmonization of input file ----
@@ -368,16 +368,19 @@ translate_and_consolidate_scores <- function(
   return(biomarkers_data)
 }
 
-#' @title Get dictionary for LEOPARD biomarkers (2025)
-#' @description This function returns a dictionary for translating numerical scores to nominal scores for LEOPARD biomarkers.
+#' @title Get default biomarker dictionary
+#' @description This function returns a dictionary for translating numerical scores to nominal scores for default biomarkers.
 #' @param biomarker The name of the biomarker.
 #' @return A named vector representing the dictionary for the specified biomarker.
 #' @export
 #' @examples
+#' options(width = 10000) # for printing
 #' library(TMAtools)
-#' print(get_leopard_dict("ER"))
-#' print(get_leopard_dict("CTNNB1"))
-get_leopard_dict <- function(biomarker) {
+#' biomarkers <- c("ER", "TP53", "CTNNB1", "WT1")
+#' for (biomarker in biomarkers) {
+#'    print(c(biomarker, get_default_dict(biomarker)))
+#' }
+get_default_dict <- function(biomarker) {
   if (biomarker %in% c("ER", "PR", "WT1", "PAX2", "GATA3", "TTF1", "CDX2")) {
     dict <- c(
       "0" = "negative",

@@ -53,5 +53,5 @@ consolidated_data <- translate_and_consolidate_scores(
 head(consolidated_data)
 }
 \seealso{
-\code{\link{get_leopard_dict}} for the default dictionary function.
+\code{\link{get_default_dict}} for the default dictionary function.
 }
