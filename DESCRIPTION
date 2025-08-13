@@ -3,6 +3,7 @@ Title: Tissue Microarray (TMA) data processing and integration at scale.
 Version: 1.0.1
 Authors@R: c(
     person("Bianca", "Ribeiro de Souza", , "bianca.ribeiro@ubc.ca", role = c("aut", "cre")),
+    person("Hannah", "Okada Akhlaghi", role = "ctb"),
     person(, "Endometriosis Oncogenomics and Pathology Research Lab", role = c("cph", "fnd")),
     person("Giuliano", "Netto Flores Cruz", role = "ctb")
   )
