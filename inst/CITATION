@@ -5,6 +5,7 @@ citEntry(
   title = "TMAtools: processing and integration of Tissue Microarray (TMA) data at scale",
   author = c(
     person("Bianca", "Ribeiro de Souza", email = "bianca.ribeiro@ubc.ca", role = c("aut", "cre")),
+    person("Hannah", "Okada Akhlaghi", role = "ctb"),
     person("Giuliano", "Netto Flores Cruz", role = "ctb"),
     person("", "EDGE Research Lab", role = c("cph", "fnd"))
   ),
