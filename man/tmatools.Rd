@@ -6,10 +6,12 @@
 \usage{
 tmatools(
   tma_dirs,
+  biomarker_rules_file,
   output_dir = "tmatools_output",
-  combined_tma_file = "combined_tma.xlsx",
-  deconvoluted_tma_file = "deconvoluted_tma.xlsx",
-  consolidated_tma_file = "consolidated_tma.xlsx",
+  combined_tma_file = "1_combined_tma.xlsx",
+  deconvoluted_tma_file = "2_deconvoluted_tma.xlsx",
+  translated_tma_file = "3_translated_tma.xlsx",
+  consolidated_tma_file = "4_consolidated_tma.xlsx",
   biomarker_sheet_index = 2,
   tma_map_sheet_index = 1,
   required_biomarkers = c("ER", "TP53")

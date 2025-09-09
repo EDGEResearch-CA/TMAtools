@@ -26,10 +26,12 @@
 #' )
 tmatools <- function(
     tma_dirs,
+    biomarker_rules_file,
     output_dir = "tmatools_output",
-    combined_tma_file = "combined_tma.xlsx",
-    deconvoluted_tma_file = "deconvoluted_tma.xlsx",
-    consolidated_tma_file = "consolidated_tma.xlsx",
+    combined_tma_file = "1_combined_tma.xlsx",
+    deconvoluted_tma_file = "2_deconvoluted_tma.xlsx",
+    translated_tma_file = "3_translated_tma.xlsx",
+    consolidated_tma_file = "4_consolidated_tma.xlsx",
     biomarker_sheet_index = 2,
     tma_map_sheet_index = 1,
     required_biomarkers = c("ER", "TP53")
@@ -39,12 +41,16 @@ tmatools <- function(
             stop("Directory does not exist: ", tma_dir)
         }
     }
+    stopifnot(file.exists(biomarker_rules_file))
     dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
     combined_prefix <- tools::file_path_sans_ext(
         basename(combined_tma_file)
     )
     deconvoluted_prefix <- tools::file_path_sans_ext(
         basename(deconvoluted_tma_file)
+    )
+    translated_prefix <- tools::file_path_sans_ext(
+        basename(translated_tma_file)
     )
     consolidated_prefix <- tools::file_path_sans_ext(
         basename(consolidated_tma_file)
@@ -69,7 +75,8 @@ tmatools <- function(
         metadata <- readxl::read_excel(metadata_file[1], sheet = 1)
         if (!all(c("core_id", "accession_id") %in% colnames(metadata))) {
             stop(
-                "Metadata file does not contain required columns: core_id, accession_id"
+                "Metadata file missing some of the required columns (core_id, accession_id): ",
+                metadata_file[1]
             )
         }
 
@@ -87,6 +94,15 @@ tmatools <- function(
             dirname(deconvoluted_tma_file),
             paste0(
                 deconvoluted_prefix,
+                "_",
+                basename(tma_dir),
+                ".xlsx"
+            )
+        )
+        .translated_tma_file <- file.path(
+            dirname(translated_tma_file),
+            paste0(
+                translated_prefix,
                 "_",
                 basename(tma_dir),
                 ".xlsx"
@@ -122,17 +138,28 @@ tmatools <- function(
             )
         )
         # translate numerical biomarker scores to nominal scores
-        # and consolidate them for each case
-        consolidated_data <- translate_and_consolidate_scores(
+        translate_scores(
             biomarkers_file = file.path(
                 output_dir,
                 .deconvoluted_tma_file
             ),
-            required_biomarkers = required_biomarkers,
+            output_file = file.path(
+                output_dir,
+                .translated_tma_file
+            ),
+            biomarker_rules_file = biomarker_rules_file
+        )
+        # and consolidate them for each case
+        consolidated_data <- consolidate_scores(
+            biomarkers_file = file.path(
+                output_dir,
+                .translated_tma_file
+            ),
             output_file = file.path(
                 output_dir,
                 .consolidated_tma_file
-            )
+            ),
+            biomarker_rules_file = biomarker_rules_file
         )
 
         all_spreadsheets[[basename(tma_dir)]] <- dplyr::left_join(

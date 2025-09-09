@@ -125,5 +125,5 @@ deconvolute <- function(tma_file, output_file = NULL) {
         )
         return(invisible(deconvoluted_results))
     }
-    return(deconvoluted_results)
+    return(invisible(deconvoluted_results))
 }
