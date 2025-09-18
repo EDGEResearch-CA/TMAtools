@@ -41,10 +41,12 @@ translate_scores <- function(
   output_file = NULL
 ) {
   ## Define required biomarkers (17) for analyses 2025
-  translation_dict <- get_translation_dictionary(biomarker_rules_file = biomarker_rules_file)
+  translation_dict <- get_translation_dictionary(
+    biomarker_rules_file = biomarker_rules_file
+  )
 
   required_biomarkers <- names(translation_dict)
-  
+
   # Harmonization of input file ----
   ## read biomarker data for a TMA (deconvoluted numerical scores)
   biomarkers_data <- readxl::read_excel(
@@ -60,7 +62,6 @@ translate_scores <- function(
         ~ dplyr::if_else(is.na(.), "x", .)
       )
     )
-
 
   ## ensure all required biomarkers have at least one column in biomarkers_data
   # if a required biomarker is missing a placeholder column will be created and named as biomarker.c0
@@ -126,7 +127,11 @@ translate_scores <- function(
 #' @export
 get_translation_dictionary <- function(biomarker_rules_file) {
   if (!file.exists(biomarker_rules_file)) {
-    stop(paste0("Biomarker rules file ", biomarker_rules_file, " does not exist."))
+    stop(paste0(
+      "Biomarker rules file ",
+      biomarker_rules_file,
+      " does not exist."
+    ))
   }
   dict_df <- readxl::read_excel(
     path = biomarker_rules_file,

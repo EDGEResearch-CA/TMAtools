@@ -47,7 +47,9 @@ consolidate_scores <- function(
   biomarker_rules_file = NULL,
   output_file = NULL
 ) {
-  consolidation_df <- get_consolidation_rules_df(biomarker_rules_file = biomarker_rules_file)
+  consolidation_df <- get_consolidation_rules_df(
+    biomarker_rules_file = biomarker_rules_file
+  )
   required_biomarkers <- unique(consolidation_df$biomarker)
   required_biomarkers <- required_biomarkers[required_biomarkers != "all"]
 
@@ -102,7 +104,6 @@ consolidate_scores <- function(
         )
       }
     )
-    
   }
 
   ## SAFETY CHECK for consolidation ----
@@ -144,7 +145,11 @@ consolidate_scores <- function(
 #' @export
 get_consolidation_rules_df <- function(biomarker_rules_file) {
   if (!file.exists(biomarker_rules_file)) {
-    stop(paste0("Biomarker rules file ", biomarker_rules_file, " does not exist."))
+    stop(paste0(
+      "Biomarker rules file ",
+      biomarker_rules_file,
+      " does not exist."
+    ))
   }
   consolidation_df <- readxl::read_excel(
     path = biomarker_rules_file,
@@ -165,15 +170,21 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
       )
     )
   }
-  
+
   # check that all biomarkers have at least one else rule
   # except for "all"
   biomarkers <- unique(consolidation_df$biomarker)
   for (biomarker in biomarkers) {
     if (biomarker != "all") {
-      biomarker_sub_df <- consolidation_df[consolidation_df$biomarker == biomarker, ]
+      biomarker_sub_df <- consolidation_df[
+        consolidation_df$biomarker == biomarker,
+      ]
       if (!any(biomarker_sub_df$rule_type == "else")) {
-        stop(paste0("Biomarker ", biomarker, " does not have an 'else' rule. Please add one to ensure all cases are covered."))
+        stop(paste0(
+          "Biomarker ",
+          biomarker,
+          " does not have an 'else' rule. Please add one to ensure all cases are covered."
+        ))
       }
     }
   }
@@ -186,7 +197,6 @@ consolidate_single_patient <- function(
   scores,
   unknown_values = c("Unk", "x")
 ) {
-
   if (any(is.na(scores))) {
     stop("Scores contain NA values.")
   }
@@ -199,7 +209,7 @@ consolidate_single_patient <- function(
   for (i in seq_len(nrow(rules_df))) {
     # grab rules
     rule_types <- stringr::str_split_1(rules_df$rule_type[i], pattern = ";")
-    
+
     if (length(rule_types) == 1 && rule_types == "else") {
       rule_values <- NA
     } else {
@@ -210,7 +220,8 @@ consolidate_single_patient <- function(
     if (length(rule_values) != n_rules) {
       stop(
         paste0(
-          "In biomarker ", biomarker,
+          "In biomarker ",
+          biomarker,
           " the number of rule types (",
           n_rules,
           ") does not match the number of rule values (",
