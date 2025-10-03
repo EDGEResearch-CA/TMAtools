@@ -35,7 +35,7 @@
 deconvolute <- function(tma_file, output_file = NULL) {
     sheet_names <- readxl::excel_sheets(tma_file)
     if (!"TMA map" %in% sheet_names) {
-        stop("The input spreadsheet must contain a 'TMA map' sheet.")
+        cli::cli_abort("The input spreadsheet must contain a 'TMA map' sheet.")
     }
     spreadsheets <- lapply(
         readxl::excel_sheets(tma_file),
@@ -63,7 +63,7 @@ deconvolute <- function(tma_file, output_file = NULL) {
             "biomarker-specific sheets do not match for the following sheets:\n",
             paste0(sheet_names[!matches_tma_map], collapse = ", ")
         )
-        stop(msg)
+        cli::cli_abort(msg)
     }
     core_ids <- unique(na.omit(unlist(tma_map)))
     biomarker_names <- sheet_names[sheet_names != "TMA map"]

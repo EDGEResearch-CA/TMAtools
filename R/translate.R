@@ -66,21 +66,54 @@ translate_scores <- function(
   ## ensure all required biomarkers have at least one column in biomarkers_data
   # if a required biomarker is missing a placeholder column will be created and named as biomarker.c0
 
+  invalid_scores <- list()
   for (biomarker_name in required_biomarkers) {
-    doest_not_contain_biomarker_name <- !any(
+    does_not_contain_biomarker_name <- !any(
       stringr::str_detect(
         colnames(biomarkers_data),
         stringr::fixed(biomarker_name, ignore_case = TRUE)
       )
     ) # does not matter if the biomarker name in the columns is uppercase or lowercase
 
-    if (doest_not_contain_biomarker_name) {
-      message(paste0(
-        "Adding placeholder column for biomarker ",
-        biomarker_name
-      ))
+    if (does_not_contain_biomarker_name) {
+      message(
+        paste0(
+          "Adding placeholder column for biomarker ",
+          biomarker_name
+        )
+      )
       biomarkers_data[[paste0(biomarker_name, ".c0")]] <- "x"
     }
+    # check if all TMA cores are covered by the dictionary
+    biomarker_columns <- colnames(biomarkers_data)[
+      stringr::str_detect(
+        colnames(biomarkers_data),
+        paste0(biomarker_name, "\\.c\\d+")
+      )
+    ]
+    unique_scores <- unique(unlist(biomarkers_data[, biomarker_columns]))
+    .invalid_scores <- setdiff(
+      unique_scores,
+      names(translation_dict[[biomarker_name]])
+    )
+    if (length(.invalid_scores) > 0) {
+      invalid_scores[[biomarker_name]] <- .invalid_scores
+    }
+  }
+
+  if (length(invalid_scores) > 0) {
+    msg <- "There are biomarkers with scores not covered in the translation dictionary: "
+    for (i in seq_along(invalid_scores)) {
+      invalid_biomarker_name <- names(invalid_scores)[i]
+      msg <- paste0(
+        msg,
+        invalid_biomarker_name,
+        " (",
+        paste0(invalid_scores[[invalid_biomarker_name]], collapse = ", "),
+        ifelse(i < length(invalid_scores), "); ", ")")
+      )
+    }
+    cli::cli_abort(msg)
   }
 
   # Replacing numerical scores with nominal scores for each biomarker ----
@@ -104,7 +137,7 @@ translate_scores <- function(
       !complete.cases(biomarkers_data),
     ]
     print(biomarkers_data_with_na)
-    stop(
+    cli::cli_abort(
       "The cases above contain some NA after replacing numerical scores with nominal scores."
     )
   }
@@ -127,29 +160,35 @@ translate_scores <- function(
 #' @export
 get_translation_dictionary <- function(biomarker_rules_file) {
   if (!file.exists(biomarker_rules_file)) {
-    stop(paste0(
+    cli::cli_abort(paste0(
       "Biomarker rules file ",
       biomarker_rules_file,
       " does not exist."
     ))
   }
-  dict_df <- readxl::read_excel(
-    path = biomarker_rules_file,
-    sheet = "translation",
-    col_types = c("text", "text", "text")
-  )
+  dict_df <- suppressMessages({
+    readxl::read_excel(
+      path = biomarker_rules_file,
+      sheet = "translation",
+      col_types = "text"
+    )
+  })
+  required_columns <- c("biomarker", "original_score", "translated_score")
   missing_cols <- setdiff(
     c("biomarker", "original_score", "translated_score"),
     colnames(dict_df)
   )
   if (length(missing_cols) > 0) {
-    stop(paste0(
+    cli::cli_abort(paste0(
       "Biomarker rules file ",
       biomarker_rules_file,
       " is missing columns required for translation: ",
       paste0(missing_cols, collapse = ", ")
     ))
   }
+
+  # select only required columns
+  dict_df <- dict_df[, required_columns]
 
   .dict <- lapply(
     split(dict_df, dict_df$biomarker),
