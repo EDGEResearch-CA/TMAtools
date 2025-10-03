@@ -38,7 +38,7 @@ tmatools <- function(
 ) {
     for (tma_dir in tma_dirs) {
         if (!dir.exists(tma_dir)) {
-            stop("Directory does not exist: ", tma_dir)
+            cli::cli_abort("Directory does not exist: ", tma_dir)
         }
     }
     stopifnot(file.exists(biomarker_rules_file))
@@ -67,14 +67,14 @@ tmatools <- function(
             full.names = TRUE
         )
         if (length(metadata_file) == 0) {
-            stop("No metadata file found in: ", tma_dir)
+            cli::cli_abort("No metadata file found in: ", tma_dir)
         }
         if (length(metadata_file) > 1) {
-            stop("Multiple metadata files found in: ", tma_dir)
+            cli::cli_abort("Multiple metadata files found in: ", tma_dir)
         }
         metadata <- readxl::read_excel(metadata_file[1], sheet = 1)
         if (!all(c("core_id", "accession_id") %in% colnames(metadata))) {
-            stop(
+            cli::cli_abort(
                 "Metadata file missing some of the required columns (core_id, accession_id): ",
                 metadata_file[1]
             )

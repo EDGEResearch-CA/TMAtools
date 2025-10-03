@@ -134,7 +134,7 @@ translate_and_consolidate_scores <- function(
       !complete.cases(biomarkers_data),
     ]
     print(biomarkers_data_with_na)
-    stop(
+    cli::cli_abort(
       "The cases above contain some NA after replacing numerical scores with nominal scores."
     )
   }
@@ -265,7 +265,7 @@ translate_and_consolidate_scores <- function(
     # getting biomarkers that were deconvoluted already
 
     if (length(biomarker_columns_names) == 0) {
-      stop("FATAL - failed in finding all required biomarkers")
+      cli::cli_abort("FATAL - failed in finding all required biomarkers")
     }
 
     # for pretty printing of the message containing the names of the columns
@@ -299,7 +299,7 @@ translate_and_consolidate_scores <- function(
       # it means there are no columns with .c1, .c2 etc, so biomarker is (probably) consolidated already
       if (length(biomarker_columns_names) > 1) {
         # ensure there is a single column, representing already consolidated data
-        stop(paste0(
+        cli::cli_abort(paste0(
           "Consolidation failed for biomarker ",
           biomarker_name,
           " with columns: ",

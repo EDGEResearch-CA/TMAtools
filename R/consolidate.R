@@ -115,7 +115,7 @@ consolidate_scores <- function(
       !complete.cases(biomarkers_data),
     ]
     print(biomarkers_data_with_na)
-    stop(
+    cli::cli_abort(
       "The cases above contain some NA after replacing numerical scores with nominal scores."
     )
   }
@@ -145,7 +145,7 @@ consolidate_scores <- function(
 #' @export
 get_consolidation_rules_df <- function(biomarker_rules_file) {
   if (!file.exists(biomarker_rules_file)) {
-    stop(paste0(
+    cli::cli_abort(paste0(
       "Biomarker rules file ",
       biomarker_rules_file,
       " does not exist."
@@ -161,7 +161,7 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
     colnames(consolidation_df)
   )
   if (length(missing_cols) > 0) {
-    stop(
+    cli::cli_abort(
       paste0(
         "Biomarker rules file ",
         biomarker_rules_file,
@@ -180,7 +180,7 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
         consolidation_df$biomarker == biomarker,
       ]
       if (!any(biomarker_sub_df$rule_type == "else")) {
-        stop(paste0(
+        cli::cli_abort(paste0(
           "Biomarker ",
           biomarker,
           " does not have an 'else' rule. Please add one to ensure all cases are covered."
@@ -198,7 +198,7 @@ consolidate_single_patient <- function(
   unknown_values = c("Unk", "x")
 ) {
   if (any(is.na(scores))) {
-    stop("Scores contain NA values.")
+    cli::cli_abort("Scores contain NA values.")
   }
 
   if (all(scores %in% unknown_values)) {
@@ -218,7 +218,7 @@ consolidate_single_patient <- function(
     consolidated_value <- rules_df$consolidated_value[i]
     n_rules <- length(rule_types)
     if (length(rule_values) != n_rules) {
-      stop(
+      cli::cli_abort(
         paste0(
           "In biomarker ",
           biomarker,
@@ -251,7 +251,7 @@ consolidate_single_patient <- function(
       } else if (rule_type == "else") {
         n_required <- 0 # always true
       } else {
-        stop(paste0("Unknown rule type: ", rule_type))
+        cli::cli_abort(paste0("Unknown rule type: ", rule_type))
       }
 
       # check if rule is satisfied
@@ -268,7 +268,7 @@ consolidate_single_patient <- function(
   }
 
   # if no rule matched throw an error
-  stop(
+  cli::cli_abort(
     paste0(
       "No consolidation rule matched for scores: ",
       paste0(scores, collapse = ", "),

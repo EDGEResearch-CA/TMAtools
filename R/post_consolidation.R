@@ -2,7 +2,7 @@ assess_mmr_status <- function(biomarkers_data) {
   mmr_biomarkers <- c("mlh1", "msh2", "msh6", "pms2") # lowercase since using post-consolidation columns
   missing_biomarkers <- setdiff(mmr_biomarkers, colnames(biomarkers_data))
   if (length(missing_biomarkers) > 0) {
-    stop(
+    cli::cli_abort(
       paste0(
         "Cannot assess MMR status because the following required biomarkers are missing: ",
         paste0(missing_biomarkers, collapse = ", ")
