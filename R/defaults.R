@@ -7,25 +7,25 @@
 #' default_biomarkers <- get_default_biomarkers()
 #' print(default_biomarkers)
 get_default_biomarkers <- function() {
-    c(
-        "ER",
-        "PR",
-        "WT1",
-        "PAX2",
-        "GATA3",
-        "TTF1",
-        "CDX2",
-        "MLH1",
-        "MSH2",
-        "MSH6",
-        "PMS2",
-        "ARID1A",
-        "RB1",
-        "CTNNB1",
-        "TP53",
-        "p16",
-        "PTEN"
-    )
+  c(
+    "ER",
+    "PR",
+    "WT1",
+    "PAX2",
+    "GATA3",
+    "TTF1",
+    "CDX2",
+    "MLH1",
+    "MSH2",
+    "MSH6",
+    "PMS2",
+    "ARID1A",
+    "RB1",
+    "CTNNB1",
+    "TP53",
+    "p16",
+    "PTEN"
+  )
 }
 
 #' @title Get biomarker dictionary (default function)
@@ -39,7 +39,7 @@ get_default_biomarkers <- function() {
 #' biomarkers <- c("ER", "TP53", "CTNNB1", "WT1")
 #' for (biomarker in biomarkers) {
 #'    print(
-#'       c(biomarker, get_dict_default(biomarker)), 
+#'       c(biomarker, get_dict_default(biomarker)),
 #'       width = 10000  # for prettier printing
 #'    )
 #' }

@@ -142,7 +142,6 @@ consolidate_scores <- function(
 #' It must contain a sheet named "consolidation" with columns
 #' "biomarker", "rule_type", "rule_value", "consolidated_value".
 #' @return a data.frame of consolidation rules for each biomarker.
-#' @export
 get_consolidation_rules_df <- function(biomarker_rules_file) {
   if (!file.exists(biomarker_rules_file)) {
     cli::cli_abort(paste0(
@@ -192,6 +191,11 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
   return(consolidation_df)
 }
 
+#' @title Assess consolidated score per patient
+#' @param rules_df data.frame with consolidation rules for a single biomarker
+#' @param scores character vector with all scores for a given biomarker/patient
+#' @param unknow_values character vector with values treated as unknown.
+#' Defaults to `c("Unk", "x")`.
 consolidate_single_patient <- function(
   rules_df,
   scores,
@@ -236,9 +240,15 @@ consolidate_single_patient <- function(
       # evaluate rule k
       rule_type <- rule_types[[k]]
       rule_value <- rule_values[[k]]
-      n_matches <- sum(scores == rule_value, na.rm = TRUE)
+      # in case there are rule_values that includes
+      # two or more scores (rule_value) separated by ","
+      if (!is.na(rule_value)) {
+        rule_value <- stringr::str_trim(stringr::str_split_1(rule_value, ","))
+      }
+      n_matches <- sum(scores %in% rule_value, na.rm = TRUE)
 
       # determine how many matches are required
+      # to consider that the rule is satisfied (n_required)
       if (rule_type == "any") {
         n_required <- 1 # at least one match
       } else if (rule_type == "all") {
@@ -259,6 +269,7 @@ consolidate_single_patient <- function(
         n_trues <- n_trues + 1
       }
     }
+
     if (n_trues == n_rules) {
       # all rules in a row of the biomarkers rules
       # spreadsheet are satisfied

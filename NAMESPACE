@@ -3,7 +3,6 @@
 export(combine_tma_spreadsheets)
 export(consolidate_scores)
 export(deconvolute)
-export(get_consolidation_rules_df)
 export(get_default_biomarkers)
 export(get_default_dict)
 export(get_dict_default)

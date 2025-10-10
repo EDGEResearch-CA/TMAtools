@@ -15,21 +15,21 @@ consolidated_tma_file <- stringr::str_glue("{output_dir}/consolidated_tma.xlsx")
 
 # combine TMA datasets
 combine_tma_spreadsheets(
- tma_dir = tma_dir,
- output_file = combined_tma_file
+  tma_dir = tma_dir,
+  output_file = combined_tma_file
 )
 
 # deconvolute combined TMA dataset
 deconvolute(
-   tma_file = combined_tma_file,
-   output_file = deconvoluted_tma_file
+  tma_file = combined_tma_file,
+  output_file = deconvoluted_tma_file
 )
 
 # translate numerical scores to nominal scores
 translate_scores(
-   biomarkers_file = deconvoluted_tma_file,
-   biomarker_rules_file = biomarker_rules_file,
-   output_file = translated_tma_file
+  biomarkers_file = deconvoluted_tma_file,
+  biomarker_rules_file = biomarker_rules_file,
+  output_file = translated_tma_file
 )
 
 # and consolidate nominal scores for each case
@@ -42,7 +42,14 @@ head(consolidated_data)
 
 # full thing in one function
 tmatools(
-    tma_dirs = here::here(c("inst/extdata/tma1", "inst/extdata/tma2")),
-    biomarker_rules_file = here::here("inst/extdata/biomarker_rules_enoc.xlsx"),
-    output_dir = here::here("tmp/tesigbh")
+  tma_dirs = here::here(c("inst/extdata/tma1", "inst/extdata/tma2")),
+  biomarker_rules_file = here::here("inst/extdata/biomarker_rules_enoc.xlsx"),
+  output_dir = here::here("tmp/tesigbh")
+)
+
+# full thing in one function
+tmatools(
+  tma_dir = here::here("tmp/example/tma3"),
+  biomarker_rules_file = here::here("tmp/example/biomarker_rules_enoc.xlsx"),
+  output_dir = here::here("tmp/newtest")
 )
