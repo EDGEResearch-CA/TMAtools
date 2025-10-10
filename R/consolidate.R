@@ -240,7 +240,12 @@ consolidate_single_patient <- function(
       # evaluate rule k
       rule_type <- rule_types[[k]]
       rule_value <- rule_values[[k]]
-      n_matches <- sum(scores == rule_value, na.rm = TRUE)
+      # in case there are rule_values that includes
+      # two or more scores (rule_value) separated by ","
+      if (!is.na(rule_value)) {
+        rule_value <- stringr::str_trim(stringr::str_split_1(rule_value, ","))
+      }
+      n_matches <- sum(scores %in% rule_value, na.rm = TRUE)
 
       # determine how many matches are required
       # to consider that the rule is satisfied (n_required)

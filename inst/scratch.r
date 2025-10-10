@@ -46,3 +46,10 @@ tmatools(
   biomarker_rules_file = here::here("inst/extdata/biomarker_rules_enoc.xlsx"),
   output_dir = here::here("tmp/tesigbh")
 )
+
+# full thing in one function
+tmatools(
+  tma_dir = here::here("tmp/example/tma3"),
+  biomarker_rules_file = here::here("tmp/example/biomarker_rules_enoc.xlsx"),
+  output_dir = here::here("tmp/newtest")
+)
