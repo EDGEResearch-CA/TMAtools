@@ -132,6 +132,7 @@ tmatools <- function(
         output_dir,
         .combined_tma_file
       ),
+      metadata = metadata,
       output_file = file.path(
         output_dir,
         .deconvoluted_tma_file
@@ -162,11 +163,7 @@ tmatools <- function(
       biomarker_rules_file = biomarker_rules_file
     )
 
-    all_spreadsheets[[basename(tma_dir)]] <- dplyr::left_join(
-      consolidated_data,
-      metadata,
-      by = "core_id"
-    )
+    all_spreadsheets[[basename(tma_dir)]] <- consolidated_data
   }
 
   all_spreadsheets <- dplyr::bind_rows(

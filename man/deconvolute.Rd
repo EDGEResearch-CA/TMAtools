@@ -4,13 +4,15 @@
 \alias{deconvolute}
 \title{Deconvolute TMA map}
 \usage{
-deconvolute(tma_file, output_file = NULL)
+deconvolute(tma_file, metadata = NULL, output_file = NULL)
 }
 \arguments{
 \item{tma_file}{Path to input Excel spreadsheet.
 Both .xlsx and .xls formats are supported.
 Must contain one "TMA map" sheet and one or more
 biomarker-specific sheets.}
+
+\item{metadata}{data.frame with core_id and accession_id columns}
 
 \item{output_file}{Optional path to output
 Excel spreadsheet.}

@@ -5,6 +5,7 @@
 #' biomarker-specific sheets.
 #' @param output_file Optional path to output
 #' Excel spreadsheet.
+#' @param metadata data.frame with core_id and accession_id columns
 #' @description Reads TMA spreadsheet from `tma_file`
 #' which must contain one "TMA map" sheet and one or more
 #' biomaker-specific sheets.
@@ -32,7 +33,7 @@
 #' tma_file <- system.file("extdata", "example.xlsx", package = "TMAtools")
 #' deconvoluted_data <- deconvolute(tma_file)
 #' head(deconvoluted_data)
-deconvolute <- function(tma_file, output_file = NULL) {
+deconvolute <- function(tma_file, metadata = NULL, output_file = NULL) {
   sheet_names <- readxl::excel_sheets(tma_file)
   if (!"TMA map" %in% sheet_names) {
     cli::cli_abort("The input spreadsheet must contain a 'TMA map' sheet.")
@@ -116,6 +117,18 @@ deconvolute <- function(tma_file, output_file = NULL) {
   )
 
   deconvoluted_results <- deconvoluted_results[, ordered_cols]
+  # left join with metadata
+  if (!is.null(metadata)) {
+    deconvoluted_results <- dplyr::left_join(
+      deconvoluted_results,
+      metadata |> dplyr::select(core_id, accession_id),
+      by = "core_id"
+    ) |>
+      dplyr::select(
+        accession_id,
+        dplyr::all_of(ordered_cols)
+      )
+  }
 
   if (!is.null(output_file)) {
     writexl::write_xlsx(
