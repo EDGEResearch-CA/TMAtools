@@ -21,7 +21,7 @@ library(TMAtools)
 biomarkers <- c("ER", "TP53", "CTNNB1", "WT1")
 for (biomarker in biomarkers) {
    print(
-      c(biomarker, get_dict_default(biomarker)), 
+      c(biomarker, get_dict_default(biomarker)),
       width = 10000  # for prettier printing
    )
 }
