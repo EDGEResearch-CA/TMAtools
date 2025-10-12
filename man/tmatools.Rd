@@ -12,6 +12,7 @@ tmatools(
   deconvoluted_tma_file = "2_deconvoluted_tma.xlsx",
   translated_tma_file = "3_translated_tma.xlsx",
   consolidated_tma_file = "4_consolidated_tma.xlsx",
+  final_tma_file = "5_final_consolidated_tmas.xlsx",
   biomarker_sheet_index = 2,
   tma_map_sheet_index = 1,
   required_biomarkers = c("ER", "TP53")
@@ -27,6 +28,8 @@ tmatools(
 \item{deconvoluted_tma_file}{The name of the deconvoluted TMA file.}
 
 \item{consolidated_tma_file}{The name of the consolidated TMA file.}
+
+\item{final_tma_file}{The name of the final file containing the consolidated scores from multiple TMAs processed.}
 
 \item{biomarker_sheet_index}{The index of the biomarker sheet in the TMA file.}
 

@@ -8,6 +8,7 @@
 #' @param combined_tma_file The name of the combined TMA file.
 #' @param deconvoluted_tma_file The name of the deconvoluted TMA file.
 #' @param consolidated_tma_file The name of the consolidated TMA file.
+#' @param final_tma_file The name of the final file containing the consolidated scores from multiple TMAs processed.
 #' @param biomarker_sheet_index The index of the biomarker sheet in the TMA file.
 #' @param tma_map_sheet_index The index of the TMA map sheet in the TMA file.
 #' @param required_biomarkers A character vector of required biomarkers.
@@ -32,6 +33,7 @@ tmatools <- function(
   deconvoluted_tma_file = "2_deconvoluted_tma.xlsx",
   translated_tma_file = "3_translated_tma.xlsx",
   consolidated_tma_file = "4_consolidated_tma.xlsx",
+  final_tma_file = "5_final_consolidated_tmas.xlsx",
   biomarker_sheet_index = 2,
   tma_map_sheet_index = 1,
   required_biomarkers = c("ER", "TP53")
@@ -167,6 +169,12 @@ tmatools <- function(
     all_spreadsheets[[basename(tma_dir)]] <- consolidated_data
   }
 
+  if (length(all_spreadsheets) == 1) {
+    # if only 1 tma (one folder being processed)
+    return(all_spreadsheets[[1]])
+  }
+
+  # if multiple tmas
   all_spreadsheets <- dplyr::bind_rows(all_spreadsheets) |>
     dplyr::select(
       tma_id,
@@ -180,6 +188,11 @@ tmatools <- function(
     dplyr::pull(accession_id)
   if (length(replicated_acc_id) == 0) {
     # no replicated accession IDs
+    writexl::write_xlsx(
+      all_spreadsheets,
+      path = final_tma_file,
+      col_names = TRUE
+    )
     return(all_spreadsheets)
   }
 
