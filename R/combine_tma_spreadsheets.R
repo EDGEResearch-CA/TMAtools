@@ -20,80 +20,80 @@
 #' # check the output Excel file, which should then be used as
 #' # the input for `TMAtools::deconvolute()`
 combine_tma_spreadsheets <- function(
-    tma_dir,
-    output_file = "combined_tma_spreadsheet.xlsx",
-    biomarker_sheet_index = 2,
-    tma_map_sheet_index = 1
+  tma_dir,
+  output_file = "combined_tma_spreadsheet.xlsx",
+  biomarker_sheet_index = 2,
+  tma_map_sheet_index = 1
 ) {
-    tma_files <- list.files(
-        path = tma_dir,
-        pattern = "\\.xls[x]?$",
-        full.names = TRUE
-    )
-    # filter out metadata files
-    tma_files <- tma_files[!grepl("metadata", tma_files, ignore.case = TRUE)]
+  tma_files <- list.files(
+    path = tma_dir,
+    pattern = "\\.xls[x]?$",
+    full.names = TRUE
+  )
+  # filter out metadata files
+  tma_files <- tma_files[!grepl("metadata", tma_files, ignore.case = TRUE)]
 
-    biomarker_sheet_names <- sapply(
-        tma_files,
-        function(file) {
-            readxl::excel_sheets(file)[biomarker_sheet_index]
-        }
-    )
-    tma_map_sheet_names <- sapply(
-        tma_files,
-        function(file) {
-            readxl::excel_sheets(file)[tma_map_sheet_index]
-        }
-    )
-
-    # Loop through each file and read the fourth tab (score sheet)
-    biomarker_data_list <- setNames(
-        vector("list", length(tma_files)),
-        biomarker_sheet_names
-    )
-    tma_map_data_list <- vector("list", length(tma_files))
-    for (i in seq_along(tma_files)) {
-        file_path <- tma_files[[i]]
-        biomarker_sheet_name <- biomarker_sheet_names[[i]]
-        tma_map_sheet_name <- tma_map_sheet_names[[i]]
-
-        # Read the biomarker sheet
-        biomarker_data_list[[biomarker_sheet_name]] <- readxl::read_excel(
-            file_path,
-            sheet = biomarker_sheet_name,
-            trim_ws = FALSE,
-            col_names = FALSE,
-            col_types = "text",
-            .name_repair = "minimal"
-        )
-        # Read the TMA map sheet
-        tma_map_data_list[[i]] <- readxl::read_excel(
-            file_path,
-            sheet = tma_map_sheet_name,
-            trim_ws = FALSE,
-            col_names = FALSE,
-            col_types = "text",
-            .name_repair = "minimal"
-        )
+  biomarker_sheet_names <- sapply(
+    tma_files,
+    function(file) {
+      readxl::excel_sheets(file)[biomarker_sheet_index]
     }
-
-    message(
-        "Using TMA map from the file: ",
-        tma_files[[1]]
-    )
-    data_list <- c(
-        list("TMA map" = tma_map_data_list[[1]]),
-        biomarker_data_list
-    )
-
-    if (!is.null(output_file)) {
-        writexl::write_xlsx(
-            data_list,
-            output_file,
-            col_names = FALSE,
-            format_headers = FALSE
-        )
+  )
+  tma_map_sheet_names <- sapply(
+    tma_files,
+    function(file) {
+      readxl::excel_sheets(file)[tma_map_sheet_index]
     }
+  )
 
-    return(invisible(data_list))
+  # Loop through each file and read the fourth tab (score sheet)
+  biomarker_data_list <- setNames(
+    vector("list", length(tma_files)),
+    biomarker_sheet_names
+  )
+  tma_map_data_list <- vector("list", length(tma_files))
+  for (i in seq_along(tma_files)) {
+    file_path <- tma_files[[i]]
+    biomarker_sheet_name <- biomarker_sheet_names[[i]]
+    tma_map_sheet_name <- tma_map_sheet_names[[i]]
+
+    # Read the biomarker sheet
+    biomarker_data_list[[biomarker_sheet_name]] <- readxl::read_excel(
+      file_path,
+      sheet = biomarker_sheet_name,
+      trim_ws = FALSE,
+      col_names = FALSE,
+      col_types = "text",
+      .name_repair = "minimal"
+    )
+    # Read the TMA map sheet
+    tma_map_data_list[[i]] <- readxl::read_excel(
+      file_path,
+      sheet = tma_map_sheet_name,
+      trim_ws = FALSE,
+      col_names = FALSE,
+      col_types = "text",
+      .name_repair = "minimal"
+    )
+  }
+
+  message(
+    "Using TMA map from the file: ",
+    tma_files[[1]]
+  )
+  data_list <- c(
+    list("TMA map" = tma_map_data_list[[1]]),
+    biomarker_data_list
+  )
+
+  if (!is.null(output_file)) {
+    writexl::write_xlsx(
+      data_list,
+      output_file,
+      col_names = FALSE,
+      format_headers = FALSE
+    )
+  }
+
+  return(invisible(data_list))
 }

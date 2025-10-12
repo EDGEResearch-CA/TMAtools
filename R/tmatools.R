@@ -136,7 +136,8 @@ tmatools <- function(
       output_file = file.path(
         output_dir,
         .deconvoluted_tma_file
-      )
+      ),
+      tma_id = basename(tma_dir)
     )
     # translate numerical biomarker scores to nominal scores
     translate_scores(
@@ -166,10 +167,7 @@ tmatools <- function(
     all_spreadsheets[[basename(tma_dir)]] <- consolidated_data
   }
 
-  all_spreadsheets <- dplyr::bind_rows(
-    all_spreadsheets,
-    .id = "tma_id"
-  ) |>
+  all_spreadsheets <- dplyr::bind_rows(all_spreadsheets) |>
     dplyr::select(
       tma_id,
       core_id,

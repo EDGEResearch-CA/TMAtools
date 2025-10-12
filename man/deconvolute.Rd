@@ -4,7 +4,7 @@
 \alias{deconvolute}
 \title{Deconvolute TMA map}
 \usage{
-deconvolute(tma_file, metadata = NULL, output_file = NULL)
+deconvolute(tma_file, metadata = NULL, output_file = NULL, tma_id = NULL)
 }
 \arguments{
 \item{tma_file}{Path to input Excel spreadsheet.
@@ -16,6 +16,8 @@ biomarker-specific sheets.}
 
 \item{output_file}{Optional path to output
 Excel spreadsheet.}
+
+\item{tma_id}{TMA identifier (from the directory's name)}
 }
 \value{
 A data frame with the deconvoluted data.
