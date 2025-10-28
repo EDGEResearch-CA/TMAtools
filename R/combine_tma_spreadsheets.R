@@ -61,7 +61,6 @@ combine_tma_spreadsheets <- function(
   for (i in seq_along(tma_files)) {
     file_path <- tma_files[[i]]
     biomarker_sheet_name <- biomarker_sheet_names[[i]]
-    tma_map_sheet_name <- tma_map_sheet_names[[i]]
 
     # Read the biomarker sheet
     biomarker_data_list[[biomarker_sheet_name]] <- readxl::read_excel(
