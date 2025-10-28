@@ -14,7 +14,6 @@ tmatools(
   consolidated_tma_file = "4_consolidated_tma.xlsx",
   final_tma_file = "5_final_consolidated_tmas.xlsx",
   biomarker_sheet_index = 2,
-  tma_map_sheet_index = 1,
   required_biomarkers = c("ER", "TP53")
 )
 }
@@ -32,8 +31,6 @@ tmatools(
 \item{final_tma_file}{The name of the final file containing the consolidated scores from multiple TMAs processed.}
 
 \item{biomarker_sheet_index}{The index of the biomarker sheet in the TMA file.}
-
-\item{tma_map_sheet_index}{The index of the TMA map sheet in the TMA file.}
 
 \item{required_biomarkers}{A character vector of required biomarkers.}
 }
