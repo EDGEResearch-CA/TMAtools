@@ -10,7 +10,6 @@
 #' @param consolidated_tma_file The name of the consolidated TMA file.
 #' @param final_tma_file The name of the final file containing the consolidated scores from multiple TMAs processed.
 #' @param biomarker_sheet_index The index of the biomarker sheet in the TMA file.
-#' @param tma_map_sheet_index The index of the TMA map sheet in the TMA file.
 #' @param required_biomarkers A character vector of required biomarkers.
 #' @return NULL
 #' @export
@@ -35,7 +34,6 @@ tmatools <- function(
   consolidated_tma_file = "4_consolidated_tma.xlsx",
   final_tma_file = "5_final_consolidated_tmas.xlsx",
   biomarker_sheet_index = 2,
-  tma_map_sheet_index = 1,
   required_biomarkers = c("ER", "TP53")
 ) {
   for (tma_dir in tma_dirs) {
@@ -125,8 +123,7 @@ tmatools <- function(
         output_dir,
         .combined_tma_file
       ),
-      biomarker_sheet_index = biomarker_sheet_index,
-      tma_map_sheet_index = tma_map_sheet_index
+      biomarker_sheet_index = biomarker_sheet_index
     )
     # deconvolute combined TMA dataset
     deconvolute(
