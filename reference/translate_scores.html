@@ -92,22 +92,13 @@ It must contain a sheet named "translation" with columns
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># translate numerical biomarker scores to nominal scores</span></span></span>
 <span class="r-in"><span><span class="co"># and consolidate them for each case</span></span></span>
-<span class="r-in"><span><span class="va">consolidated_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="translate_and_consolidate_scores.html">translate_and_consolidate_scores</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">consolidated_data</span> <span class="op">&lt;-</span> <span class="fu">translate_and_consolidate_scores</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  biomarkers_file <span class="op">=</span> <span class="va">deconvoluted_tma_file</span>,</span></span>
 <span class="r-in"><span>  required_biomarkers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ER"</span>, <span class="st">"TP53"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Consolidating ER using columns: ER.c1, ER.c2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Consolidating TP53 using columns: TP53.c1, TP53.c2</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in translate_and_consolidate_scores(biomarkers_file = deconvoluted_tma_file,     required_biomarkers = c("ER", "TP53")):</span> could not find function "translate_and_consolidate_scores"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">consolidated_data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   core_id ER.c1          ER.c2          er             TP53.c1     TP53.c2          tp53   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       Unk            Unk            Unk            cytoplasmic complete absence mutated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 5       diffuse (&gt;50%) diffuse (&gt;50%) diffuse (&gt;50%) Unk         subclonal        mutated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 9       Unk            Unk            Unk            cytoplasmic subclonal        mutated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 11      Unk            Unk            Unk            subclonal   wild type        mutated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2       Unk            focal (1-50%)  focal (1-50%)  subclonal   Unk              mutated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 6       Unk            focal (1-50%)  focal (1-50%)  Unk         Unk              Unk    </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'consolidated_data' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
