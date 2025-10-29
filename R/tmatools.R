@@ -166,12 +166,6 @@ tmatools <- function(
     all_spreadsheets[[basename(tma_dir)]] <- consolidated_data
   }
 
-  if (length(all_spreadsheets) == 1) {
-    # if only 1 tma (one folder being processed)
-    return(all_spreadsheets[[1]])
-  }
-
-  # if multiple tmas
   all_spreadsheets <- dplyr::bind_rows(all_spreadsheets) |>
     dplyr::select(
       tma_id,
@@ -179,15 +173,28 @@ tmatools <- function(
       accession_id,
       dplyr::everything()
     )
+
+  if (length(tma_dirs) == 1) {
+    # if only 1 tma (one folder being processed)
+    writexl::write_xlsx(
+      all_spreadsheets,
+      path = file.path(output_dir, final_tma_file),
+      col_names = TRUE
+    )
+    return(all_spreadsheets)
+  }
+
+  # if multiple tmas
   replicated_acc_id <- all_spreadsheets |>
     dplyr::count(accession_id) |>
     dplyr::filter(n > 1) |>
     dplyr::pull(accession_id)
+
   if (length(replicated_acc_id) == 0) {
     # no replicated accession IDs
     writexl::write_xlsx(
       all_spreadsheets,
-      path = final_tma_file,
+      path = file.path(output_dir, final_tma_file),
       col_names = TRUE
     )
     return(all_spreadsheets)
