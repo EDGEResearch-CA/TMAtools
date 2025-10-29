@@ -4,10 +4,16 @@
 \alias{get_biomarker_rules_template}
 \title{Get template biomarker rules file}
 \usage{
-get_biomarker_rules_template(output_file = "biomarker_rules_template.xlsx")
+get_biomarker_rules_template(
+  output_file = "biomarker_rules_template.xlsx",
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{output_file}{Path to output file. The template will be copied to this path.}
+
+\item{overwrite}{If TRUE and \code{output_file} exists, this function will
+overwrite the contents of \code{output_file}. Defaults to FALSE.}
 }
 \description{
 Get template biomarker rules file

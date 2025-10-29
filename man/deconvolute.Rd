@@ -4,7 +4,13 @@
 \alias{deconvolute}
 \title{Deconvolute TMA map}
 \usage{
-deconvolute(tma_file, metadata = NULL, output_file = NULL, tma_id = NULL)
+deconvolute(
+  tma_file,
+  metadata = NULL,
+  output_file = NULL,
+  tma_id = NULL,
+  partial_overlap_ok = TRUE
+)
 }
 \arguments{
 \item{tma_file}{Path to input Excel spreadsheet.
@@ -18,6 +24,11 @@ biomarker-specific sheets.}
 Excel spreadsheet.}
 
 \item{tma_id}{TMA identifier (from the directory's name)}
+
+\item{partial_overlap_ok}{If FALSE, throws an error if the overlap
+between TMA map and score sheet is only partial (e.g., there is some
+non-empty value in the score sheet that does not match a value in the
+TMA map).}
 }
 \value{
 A data frame with the deconvoluted data.
