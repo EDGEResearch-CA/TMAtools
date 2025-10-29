@@ -5,6 +5,8 @@
 #' biomarker-specific sheets.
 #' @param output_file Optional path to output
 #' Excel spreadsheet.
+#' @param metadata data.frame with core_id and accession_id columns
+#' @param tma_id TMA identifier (from the directory's name)
 #' @description Reads TMA spreadsheet from `tma_file`
 #' which must contain one "TMA map" sheet and one or more
 #' biomaker-specific sheets.
@@ -32,98 +34,122 @@
 #' tma_file <- system.file("extdata", "example.xlsx", package = "TMAtools")
 #' deconvoluted_data <- deconvolute(tma_file)
 #' head(deconvoluted_data)
-deconvolute <- function(tma_file, output_file = NULL) {
-    sheet_names <- readxl::excel_sheets(tma_file)
-    if (!"TMA map" %in% sheet_names) {
-        stop("The input spreadsheet must contain a 'TMA map' sheet.")
+deconvolute <- function(
+  tma_file,
+  metadata = NULL,
+  output_file = NULL,
+  tma_id = NULL
+) {
+  sheet_names <- readxl::excel_sheets(tma_file)
+  if (!"TMA map" %in% sheet_names) {
+    cli::cli_abort("The input spreadsheet must contain a 'TMA map' sheet.")
+  }
+  spreadsheets <- lapply(
+    readxl::excel_sheets(tma_file),
+    readxl::read_excel,
+    path = tma_file,
+    col_types = "text",
+    col_names = FALSE,
+    .name_repair = "minimal"
+  )
+  names(spreadsheets) <- sheet_names
+  tma_map <- spreadsheets[["TMA map"]]
+  matches_tma_map <- sapply(
+    sheet_names,
+    function(sheet_name) {
+      if (sheet_name == "TMA map") {
+        return(TRUE)
+      }
+      .d <- spreadsheets[[sheet_name]]
+      all.equal(which(is.na(.d)), which(is.na(tma_map)))
     }
-    spreadsheets <- lapply(
-        readxl::excel_sheets(tma_file),
-        readxl::read_excel,
-        path = tma_file,
-        col_types = "text",
-        col_names = FALSE,
-        .name_repair = "minimal"
+  )
+  if (!all(matches_tma_map)) {
+    msg <- paste0(
+      "The non-empty cells in the TMA map sheet and the ",
+      "biomarker-specific sheets do not match for the following sheets:\n",
+      paste0(sheet_names[!matches_tma_map], collapse = ", ")
     )
-    names(spreadsheets) <- sheet_names
-    tma_map <- spreadsheets[["TMA map"]]
-    matches_tma_map <- sapply(
-        sheet_names,
-        function(sheet_name) {
-            if (sheet_name == "TMA map") {
-                return(TRUE)
-            }
-            .d <- spreadsheets[[sheet_name]]
-            all.equal(which(is.na(.d)), which(is.na(tma_map)))
-        }
-    )
-    if (!all(matches_tma_map)) {
-        msg <- paste0(
-            "The non-empty cells in the TMA map sheet and the ",
-            "biomarker-specific sheets do not match for the following sheets:\n",
-            paste0(sheet_names[!matches_tma_map], collapse = ", ")
+    cli::cli_abort(msg)
+  }
+  core_ids <- unique(na.omit(unlist(tma_map)))
+  biomarker_names <- sheet_names[sheet_names != "TMA map"]
+  results <- setNames(
+    lapply(vector("list", length(core_ids)), \(...) list()),
+    core_ids
+  )
+  for (core_id in core_ids) {
+    core_ix <- !is.na(tma_map) & tma_map == core_id
+    for (biomarker_name in biomarker_names) {
+      biomarker_values <- spreadsheets[[biomarker_name]][core_ix]
+      if (length(biomarker_values) == 0L) {
+        biomarker_values <- c("c1" = NA)
+      } else {
+        names(biomarker_values) <- paste0(
+          "c",
+          seq_along(biomarker_values)
         )
-        stop(msg)
+      }
+      results[[core_id]][[biomarker_name]] <- list(biomarker_values)
     }
-    core_ids <- unique(na.omit(unlist(tma_map)))
-    biomarker_names <- sheet_names[sheet_names != "TMA map"]
-    results <- setNames(
-        lapply(vector("list", length(core_ids)), \(...) list()),
-        core_ids
-    )
-    for (core_id in core_ids) {
-        core_ix <- !is.na(tma_map) & tma_map == core_id
-        for (biomarker_name in biomarker_names) {
-            biomarker_values <- spreadsheets[[biomarker_name]][core_ix]
-            if (length(biomarker_values) == 0L) {
-                biomarker_values <- c("c1" = NA)
-            } else {
-                names(biomarker_values) <- paste0(
-                    "c",
-                    seq_along(biomarker_values)
-                )
-            }
-            results[[core_id]][[biomarker_name]] <- list(biomarker_values)
-        }
-    }
-    deconvoluted_results <- dplyr::bind_rows(results, .id = "core_id") |>
-        tidyr::pivot_longer(
-            -core_id,
-            names_to = "biomarker_name",
-            values_to = "value"
-        ) |>
-        tidyr::unnest_wider(value) |>
-        tidyr::pivot_wider(
-            names_from = "biomarker_name",
-            values_from = dplyr::matches("^c[0-9]+$"),
-            names_glue = "{biomarker_name}.{.value}",
-        )
-    col_names <- colnames(deconvoluted_results)
-    ordered_cols <- c(
-        "core_id",
-        unlist(
-            lapply(
-                biomarker_names,
-                function(b) {
-                    sort(grep(
-                        paste0("^", b, "\\.c[0-9]+$"),
-                        col_names,
-                        value = TRUE
-                    ))
-                }
-            )
-        )
+  }
+  deconvoluted_results <- dplyr::bind_rows(results, .id = "core_id") |>
+    tidyr::pivot_longer(
+      -core_id,
+      names_to = "biomarker_name",
+      values_to = "value"
+    ) |>
+    tidyr::unnest_wider(value) |>
+    tidyr::pivot_wider(
+      names_from = "biomarker_name",
+      values_from = dplyr::matches("^c[0-9]+$"),
+      names_glue = "{biomarker_name}.{.value}",
     )
 
-    deconvoluted_results <- deconvoluted_results[, ordered_cols]
+  first_columns <- "core_id"
+  if (!is.null(tma_id)) {
+    deconvoluted_results$tma_id <- tma_id # create new column with tma id (name of the folder)
+    first_columns <- c(first_columns, "tma_id")
+  }
 
-    if (!is.null(output_file)) {
-        writexl::write_xlsx(
-            deconvoluted_results,
-            path = output_file,
-            col_names = TRUE
-        )
-        return(invisible(deconvoluted_results))
-    }
-    return(deconvoluted_results)
+  col_names <- colnames(deconvoluted_results)
+  ordered_cols <- c(
+    first_columns,
+    unlist(
+      lapply(
+        biomarker_names,
+        function(b) {
+          sort(grep(
+            paste0("^", b, "\\.c[0-9]+$"),
+            col_names,
+            value = TRUE
+          ))
+        }
+      )
+    )
+  )
+
+  deconvoluted_results <- deconvoluted_results[, ordered_cols]
+  # left join with metadata
+  if (!is.null(metadata)) {
+    deconvoluted_results <- dplyr::left_join(
+      deconvoluted_results,
+      metadata |> dplyr::select(core_id, accession_id),
+      by = "core_id"
+    ) |>
+      dplyr::select(
+        accession_id,
+        dplyr::all_of(ordered_cols)
+      )
+  }
+
+  if (!is.null(output_file)) {
+    writexl::write_xlsx(
+      deconvoluted_results,
+      path = output_file,
+      col_names = TRUE
+    )
+    return(invisible(deconvoluted_results))
+  }
+  return(invisible(deconvoluted_results))
 }

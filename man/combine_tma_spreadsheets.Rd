@@ -7,18 +7,21 @@
 combine_tma_spreadsheets(
   tma_dir,
   output_file = "combined_tma_spreadsheet.xlsx",
-  biomarker_sheet_index = 2,
-  tma_map_sheet_index = 1
+  biomarker_sheet_index = 2
 )
 }
 \arguments{
-\item{tma_dir}{The directory containing the TMA spreadsheets.}
+\item{tma_dir}{The directory containing the TMA spreadsheets. This directory
+must contain:
+\itemize{
+\item One or more excel files for the scores of some biomarker (s)
+\item One excel file with "metadata" in the file name
+\item One excel file with "clean_tma" in the file name
+}}
 
 \item{output_file}{The name of the output file.}
 
 \item{biomarker_sheet_index}{The index of the sheet used for ALL files for the biomarker scores.}
-
-\item{tma_map_sheet_index}{The index of the sheet used for ALL files for the TMA map.}
 }
 \value{
 List of data frames (invisible).
@@ -33,8 +36,7 @@ tma_dir <- system.file("extdata", package = "TMAtools")
 combine_tma_spreadsheets(
     tma_dir = tma_dir,
     output_file = "combined_tma_spreadsheet.xlsx",
-    biomarker_sheet_index = 2,
-    tma_map_sheet_index = 1
+    biomarker_sheet_index = 2
 )
 # check the output Excel file, which should then be used as
 # the input for `TMAtools::deconvolute()`
