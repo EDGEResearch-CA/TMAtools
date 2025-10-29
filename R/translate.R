@@ -71,7 +71,7 @@ translate_scores <- function(
     does_not_contain_biomarker_name <- !any(
       stringr::str_detect(
         colnames(biomarkers_data),
-        stringr::fixed(biomarker_name, ignore_case = TRUE)
+        stringr::fixed(biomarker_name)
       )
     ) # does not matter if the biomarker name in the columns is uppercase or lowercase
 

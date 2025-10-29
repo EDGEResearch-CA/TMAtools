@@ -9,6 +9,7 @@
 #' - One excel file with "clean_tma" in the file name
 #' @param output_file The name of the output file.
 #' @param biomarker_sheet_index The index of the sheet used for ALL files for the biomarker scores.
+#' @param required_biomarkers Vector of required biomarkers (optional, just for checking).
 #' @return List of data frames (invisible).
 #' @export
 #' @examples
@@ -80,7 +81,8 @@ combine_tma_spreadsheets <- function(
       trim_ws = FALSE,
       col_names = FALSE,
       col_types = "text",
-      .name_repair = "minimal"
+      .name_repair = "minimal",
+      range = readxl::cell_limits(c(1, 1), c(NA, NA))
     )
   )
 

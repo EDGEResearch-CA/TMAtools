@@ -7,6 +7,10 @@
 #' Excel spreadsheet.
 #' @param metadata data.frame with core_id and accession_id columns
 #' @param tma_id TMA identifier (from the directory's name)
+#' @param partial_overlap_ok If FALSE, throws an error if the overlap
+#' between TMA map and score sheet is only partial (e.g., there is some
+#' non-empty value in the score sheet that does not match a value in the
+#' TMA map).
 #' @description Reads TMA spreadsheet from `tma_file`
 #' which must contain one "TMA map" sheet and one or more
 #' biomaker-specific sheets.
@@ -38,7 +42,8 @@ deconvolute <- function(
   tma_file,
   metadata = NULL,
   output_file = NULL,
-  tma_id = NULL
+  tma_id = NULL,
+  partial_overlap_ok = TRUE
 ) {
   sheet_names <- readxl::excel_sheets(tma_file)
   if (!"TMA map" %in% sheet_names) {
@@ -50,28 +55,13 @@ deconvolute <- function(
     path = tma_file,
     col_types = "text",
     col_names = FALSE,
+    trim_ws = FALSE,
+    range = readxl::cell_limits(c(1, 1), c(NA, NA)),
     .name_repair = "minimal"
   )
   names(spreadsheets) <- sheet_names
   tma_map <- spreadsheets[["TMA map"]]
-  matches_tma_map <- sapply(
-    sheet_names,
-    function(sheet_name) {
-      if (sheet_name == "TMA map") {
-        return(TRUE)
-      }
-      .d <- spreadsheets[[sheet_name]]
-      all.equal(which(is.na(.d)), which(is.na(tma_map)))
-    }
-  )
-  if (!all(matches_tma_map)) {
-    msg <- paste0(
-      "The non-empty cells in the TMA map sheet and the ",
-      "biomarker-specific sheets do not match for the following sheets:\n",
-      paste0(sheet_names[!matches_tma_map], collapse = ", ")
-    )
-    cli::cli_abort(msg)
-  }
+
   core_ids <- unique(na.omit(unlist(tma_map)))
   biomarker_names <- sheet_names[sheet_names != "TMA map"]
   results <- setNames(
@@ -81,7 +71,12 @@ deconvolute <- function(
   for (core_id in core_ids) {
     core_ix <- !is.na(tma_map) & tma_map == core_id
     for (biomarker_name in biomarker_names) {
-      biomarker_values <- spreadsheets[[biomarker_name]][core_ix]
+      biomarker_values <- spreadsheets[[biomarker_name]][
+        seq_len(nrow(tma_map)),
+        seq_len(ncol(tma_map)),
+        drop = FALSE
+      ]
+      biomarker_values <- biomarker_values[core_ix]
       if (length(biomarker_values) == 0L) {
         biomarker_values <- c("c1" = NA)
       } else {
@@ -134,11 +129,12 @@ deconvolute <- function(
   if (!is.null(metadata)) {
     deconvoluted_results <- dplyr::left_join(
       deconvoluted_results,
-      metadata |> dplyr::select(core_id, accession_id),
+      metadata |> dplyr::select(core_id, accession_id, dplyr::everything()),
       by = "core_id"
     ) |>
       dplyr::select(
         accession_id,
+        dplyr::any_of(colnames(metadata)),
         dplyr::all_of(ordered_cols)
       )
   }

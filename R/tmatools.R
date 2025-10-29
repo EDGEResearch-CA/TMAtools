@@ -79,6 +79,8 @@ tmatools <- function(
         metadata_file[1]
       )
     }
+    metadata$core_id <- as.character(metadata$core_id)
+    metadata$accession_id <- as.character(metadata$accession_id)
 
     # combine TMA datasets
     .combined_tma_file <- file.path(
