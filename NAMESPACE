@@ -3,6 +3,7 @@
 export(combine_tma_spreadsheets)
 export(consolidate_scores)
 export(deconvolute)
+export(get_biomarker_rules_template)
 export(get_translation_dictionary)
 export(tmatools)
 export(translate_scores)
