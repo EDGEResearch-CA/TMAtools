@@ -44,7 +44,13 @@ biomaker-specific sheets.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">deconvolute</span><span class="op">(</span><span class="va">tma_file</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, output_file <span class="op">=</span> <span class="cn">NULL</span>, tma_id <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">deconvolute</span><span class="op">(</span></span>
+<span>  <span class="va">tma_file</span>,</span>
+<span>  metadata <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tma_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  partial_overlap_ok <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +75,13 @@ Excel spreadsheet.</p></dd>
 
 <dt id="arg-tma-id">tma_id<a class="anchor" aria-label="anchor" href="#arg-tma-id"></a></dt>
 <dd><p>TMA identifier (from the directory's name)</p></dd>
+
+
+<dt id="arg-partial-overlap-ok">partial_overlap_ok<a class="anchor" aria-label="anchor" href="#arg-partial-overlap-ok"></a></dt>
+<dd><p>If FALSE, throws an error if the overlap
+between TMA map and score sheet is only partial (e.g., there is some
+non-empty value in the score sheet that does not match a value in the
+TMA map).</p></dd>
 
 </dl></div>
     <div class="section level2">
