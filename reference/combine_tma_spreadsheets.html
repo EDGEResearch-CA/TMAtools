@@ -44,8 +44,7 @@ that can be used for deconvolution with <code><a href="deconvolute.html">TMAtool
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">combine_tma_spreadsheets</span><span class="op">(</span></span>
 <span>  <span class="va">tma_dir</span>,</span>
 <span>  output_file <span class="op">=</span> <span class="st">"combined_tma_spreadsheet.xlsx"</span>,</span>
-<span>  biomarker_sheet_index <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  tma_map_sheet_index <span class="op">=</span> <span class="fl">1</span></span>
+<span>  biomarker_sheet_index <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -54,7 +53,11 @@ that can be used for deconvolution with <code><a href="deconvolute.html">TMAtool
 
 
 <dl><dt id="arg-tma-dir">tma_dir<a class="anchor" aria-label="anchor" href="#arg-tma-dir"></a></dt>
-<dd><p>The directory containing the TMA spreadsheets.</p></dd>
+<dd><p>The directory containing the TMA spreadsheets. This directory
+must contain:</p><ul><li><p>One or more excel files for the scores of some biomarker (s)</p></li>
+<li><p>One excel file with "metadata" in the file name</p></li>
+<li><p>One excel file with "clean_tma" in the file name</p></li>
+</ul></dd>
 
 
 <dt id="arg-output-file">output_file<a class="anchor" aria-label="anchor" href="#arg-output-file"></a></dt>
@@ -63,10 +66,6 @@ that can be used for deconvolution with <code><a href="deconvolute.html">TMAtool
 
 <dt id="arg-biomarker-sheet-index">biomarker_sheet_index<a class="anchor" aria-label="anchor" href="#arg-biomarker-sheet-index"></a></dt>
 <dd><p>The index of the sheet used for ALL files for the biomarker scores.</p></dd>
-
-
-<dt id="arg-tma-map-sheet-index">tma_map_sheet_index<a class="anchor" aria-label="anchor" href="#arg-tma-map-sheet-index"></a></dt>
-<dd><p>The index of the sheet used for ALL files for the TMA map.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -81,10 +80,9 @@ that can be used for deconvolution with <code><a href="deconvolute.html">TMAtool
 <span class="r-in"><span><span class="fu">combine_tma_spreadsheets</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    tma_dir <span class="op">=</span> <span class="va">tma_dir</span>,</span></span>
 <span class="r-in"><span>    output_file <span class="op">=</span> <span class="st">"combined_tma_spreadsheet.xlsx"</span>,</span></span>
-<span class="r-in"><span>    biomarker_sheet_index <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>    tma_map_sheet_index <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>    biomarker_sheet_index <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using TMA map from the file: /home/runner/work/_temp/Library/TMAtools/extdata/example.xlsx</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in combine_tma_spreadsheets(tma_dir = tma_dir, output_file = "combined_tma_spreadsheet.xlsx",     biomarker_sheet_index = 2):</span> FATAL - missing TMA clean map</span>
 <span class="r-in"><span><span class="co"># check the output Excel file, which should then be used as</span></span></span>
 <span class="r-in"><span><span class="co"># the input for `TMAtools::deconvolute()`</span></span></span>
 </code></pre></div>

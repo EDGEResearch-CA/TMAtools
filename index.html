@@ -82,14 +82,20 @@
 <p>This is a basic example which shows you how to solve a common problem:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://edgeresearch-ca.github.io/TMAtools" class="external-link">TMAtools</a></span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span>
+<span><span class="co"># 2 directories with TMA files</span></span>
 <span><span class="va">tma_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tma1"</span>, package <span class="op">=</span> <span class="st">"TMAtools"</span><span class="op">)</span>,</span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tma2"</span>, package <span class="op">=</span> <span class="st">"TMAtools"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co"># spreadsheet with translation and consolidation rules</span></span>
+<span><span class="va">biomarker_rules_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"extdata"</span>, <span class="st">"biomarker_rules_example.xlsx"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"TMAtools"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># Run the TMAtools pipeline</span></span>
 <span><span class="fu"><a href="reference/tmatools.html">tmatools</a></span><span class="op">(</span></span>
 <span>  tma_dirs <span class="op">=</span> <span class="va">tma_dirs</span>,</span>
+<span>  biomarker_rules_file <span class="op">=</span> <span class="va">biomarker_rules_file</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="st">"tmatools_output"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
