@@ -57,8 +57,8 @@ deconvolute(
    output_file = deconvoluted_tma_file
 )
 #> Error in spreadsheets[[biomarker_name]][seq_len(nrow(tma_map)), seq_len(ncol(tma_map)),     drop = FALSE]: Can't subset columns past the end.
-#> ℹ Locations 11 and 12 don't exist.
-#> ℹ There are only 10 columns.
+#> ℹ Locations 12 and 13 don't exist.
+#> ℹ There are only 11 columns.
 
 # translate numerical biomarker scores to nominal scores
 # and consolidate them for each case
