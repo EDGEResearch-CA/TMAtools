@@ -69,7 +69,8 @@ combine_tma_spreadsheets <- function(
       trim_ws = FALSE,
       col_names = FALSE,
       col_types = "text",
-      .name_repair = "minimal"
+      .name_repair = "minimal",
+      range = readxl::cell_limits(c(1, 1), c(NA, NA))
     )
   }
 
