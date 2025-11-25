@@ -63,15 +63,7 @@ sheet, the corresponding columns will all be filled with NA.
 library(TMAtools)
 tma_file <- system.file("extdata", "example.xlsx", package = "TMAtools")
 deconvoluted_data <- deconvolute(tma_file)
+#> Error: `path` does not exist: ‘’
 head(deconvoluted_data)
-#> # A tibble: 6 × 13
-#>   core_id TP53.c1 TP53.c2 TP53.c3 TP53.c4 TP53.c5 TP53.c6 ER.c1 ER.c2 ER.c3
-#>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr> <chr> <chr>
-#> 1 X1      X1      NA      NA      NA      NA      NA      X1    NA    NA   
-#> 2 X2      X2      NA      NA      NA      NA      NA      X2    NA    NA   
-#> 3 X3      X3      NA      NA      NA      NA      NA      X3    NA    NA   
-#> 4 1       x       4       0       2       NA      NA      x     x     0    
-#> 5 4       1       9       2       1       5       8       9     9     x    
-#> 6 X4      X4      NA      NA      NA      NA      NA      X4    NA    NA   
-#> # ℹ 3 more variables: ER.c4 <chr>, ER.c5 <chr>, ER.c6 <chr>
+#> Error: object 'deconvoluted_data' not found
 ```
