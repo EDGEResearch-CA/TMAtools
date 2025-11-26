@@ -92,12 +92,19 @@ translate_scores <- function(
       )
     ]
     unique_scores <- unique(unlist(biomarkers_data[, biomarker_columns]))
+    original_scores <- names(translation_dict[[biomarker_name]])
     .invalid_scores <- setdiff(
       unique_scores,
-      names(translation_dict[[biomarker_name]])
+      original_scores
     )
     if (length(.invalid_scores) > 0) {
-      invalid_scores[[biomarker_name]] <- .invalid_scores
+      if ("quantitative" %in% original_scores) {
+        not_number <- suppressWarnings(is.na(as.numeric(.invalid_scores)))
+        .invalid_scores <- .invalid_scores[not_number]
+      }
+      if (length(.invalid_scores) > 0) {
+        invalid_scores[[biomarker_name]] <- .invalid_scores
+      }
     }
   }
 
@@ -116,13 +123,25 @@ translate_scores <- function(
     cli::cli_abort(msg)
   }
 
-  # Replacing numerical scores with nominal scores for each biomarker ----
+  # Replacing original scores with nominal scores for each biomarker ----
   for (biomarker_name in required_biomarkers) {
     biomarkers_data <- biomarkers_data |>
       dplyr::mutate(
         dplyr::across(
           dplyr::matches(paste0(biomarker_name, "\\.c\\d+")),
-          ~ translation_dict[[biomarker_name]][as.character(.x)]
+          ~ {
+            dict <- translation_dict[[biomarker_name]]
+            if (!("quantitative" %in% names(dict))) {
+              return(dict[as.character(.x)])
+            }
+            is_number <- suppressWarnings(!is.na(as.numeric(.x)))
+            not_covered <- !(.x %in% names(dict))
+            dplyr::if_else(
+              is_number & not_covered,
+              as.character(.x),
+              unname(dict[as.character(.x)])
+            )
+          }
         )
       )
   } # only cores will be consolidated when the format of the column name is: biomarker name.c(any number)
