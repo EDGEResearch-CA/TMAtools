@@ -82,7 +82,11 @@ consolidate_scores <- function(
   # loop through biomarkers
   for (biomarker_name in required_biomarkers) {
     # rules for current biomarker
-    rules_df <- consolidation_df[consolidation_df$biomarker == biomarker_name, ]
+    rules_df <- consolidation_df[
+      consolidation_df$biomarker == biomarker_name,
+      ,
+      drop = FALSE
+    ]
     # scores for current biomarker
     biomarker_scores <- biomarkers_data |>
       dplyr::select(
@@ -171,19 +175,24 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
   }
 
   # check that all biomarkers have at least one else rule
-  # except for "all"
+  # except for "all" and quantitative cases
   biomarkers <- unique(consolidation_df$biomarker)
   for (biomarker in biomarkers) {
     if (biomarker != "all") {
       biomarker_sub_df <- consolidation_df[
         consolidation_df$biomarker == biomarker,
       ]
-      if (!any(biomarker_sub_df$rule_type == "else")) {
-        cli::cli_abort(paste0(
-          "Biomarker ",
-          biomarker,
-          " does not have an 'else' rule. Please add one to ensure all cases are covered."
-        ))
+      no_else <- all(biomarker_sub_df$rule_type != "else")
+      no_quant <- !any(biomarker_sub_df$rule_type %in% c("mean"))
+      if (no_else && no_quant) {
+        cli::cli_abort(
+          paste0(
+            "Biomarker ",
+            biomarker,
+            " is not quantitative and does not have an 'else' rule. ",
+            "Please check consolidation rules."
+          )
+        )
       }
     }
   }
@@ -207,6 +216,23 @@ consolidate_single_patient <- function(
 
   if (all(scores %in% unknown_values)) {
     return("Unk")
+  }
+
+  stopifnot(nrow(rules_df) > 0)
+
+  if (nrow(rules_df) > 1) {
+    if (any(rules_df$rule_type == "mean")) {
+      msg <- paste0(
+        "Please check consolidation rules as you cannot mix ",
+        "qualitative scores with mean calculation over quantitative scores."
+      )
+      cli::cli_abort(msg)
+    }
+  } else {
+    if (rules_df$rule_type == "mean") {
+      valid_scores <- scores[!(scores %in% unknown_values)]
+      return(mean(as.numeric(valid_scores)))
+    }
   }
 
   # loop through rule sets (rows of biomarker rules file)

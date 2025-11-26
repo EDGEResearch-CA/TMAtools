@@ -3,9 +3,9 @@
 devtools::load_all()
 
 # grab folder with example TMA datasets
-tma_dir <- here::here("inst/extdata/tma2")
-biomarker_rules_file <- here::here("inst/extdata/biomarker_rules_enoc.xlsx")
-output_dir <- here::here("tmp/example/tma2/test")
+tma_dir <- here::here("tmp/tma3")
+biomarker_rules_file <- here::here("tmp/biomarker_rules_enoc2.xlsx")
+output_dir <- here::here("tmp/tma3/test")
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 # define output files
 combined_tma_file <- stringr::str_glue("{output_dir}/combined_tma.xlsx")
