@@ -5,6 +5,8 @@
 #' It must contain a sheet named "consolidation" with columns
 #' "biomarker", "rule_type", "rule_value", "consolidated_value".
 #' @param output_file Optional path to the output file. If NULL, the function will not save the output.
+#' @param biomarkers_data Optinally, pass a data.frame or tibble with biomarker data
+#' instead of passing `biomarkers_file`. Used for reconsolidation in `tmatools()`
 #' @return A data frame with translated biomarker scores.
 #' @export
 #' @examples
@@ -43,9 +45,10 @@
 #' )
 #' head(consolidated_data)
 consolidate_scores <- function(
-  biomarkers_file,
+  biomarkers_file = NULL,
   biomarker_rules_file = NULL,
-  output_file = NULL
+  output_file = NULL,
+  biomarkers_data = NULL
 ) {
   consolidation_df <- get_consolidation_rules_df(
     biomarker_rules_file = biomarker_rules_file
@@ -54,10 +57,18 @@ consolidate_scores <- function(
   required_biomarkers <- required_biomarkers[required_biomarkers != "all"]
 
   ## read biomarker data for a TMA (deconvoluted numerical scores)
-  biomarkers_data <- readxl::read_excel(
-    biomarkers_file,
-    col_types = "text"
-  )
+  if (!is.null(biomarkers_file)) {
+    biomarkers_data <- readxl::read_excel(
+      biomarkers_file,
+      col_types = "text"
+    )
+  } else {
+    if (is.null(biomarkers_data)) {
+      cli::cli_abort("Must pass 'biomarkers_file or 'biomarkers_data'.")
+    }
+  }
+
+  stopifnot(inherits(biomarkers_data, "data.frame"))
 
   ## ensure all required biomarkers have at least one column in biomarkers_data
   # if a required biomarker is missing a placeholder column will be created and named as biomarker.c0
@@ -75,7 +86,7 @@ consolidate_scores <- function(
         "Adding placeholder column for biomarker ",
         biomarker_name
       ))
-      biomarkers_data[[paste0(biomarker_name, ".c0")]] <- "x"
+      biomarkers_data[[paste0(biomarker_name, ".c0")]] <- "Unk"
     }
   }
 

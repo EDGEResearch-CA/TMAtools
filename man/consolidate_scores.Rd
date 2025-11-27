@@ -5,9 +5,10 @@
 \title{Consolidate biomarkers}
 \usage{
 consolidate_scores(
-  biomarkers_file,
+  biomarkers_file = NULL,
   biomarker_rules_file = NULL,
-  output_file = NULL
+  output_file = NULL,
+  biomarkers_data = NULL
 )
 }
 \arguments{
@@ -18,6 +19,9 @@ It must contain a sheet named "consolidation" with columns
 "biomarker", "rule_type", "rule_value", "consolidated_value".}
 
 \item{output_file}{Optional path to the output file. If NULL, the function will not save the output.}
+
+\item{biomarkers_data}{Optinally, pass a data.frame or tibble with biomarker data
+instead of passing \code{biomarkers_file}. Used for reconsolidation in \code{tmatools()}}
 }
 \value{
 A data frame with translated biomarker scores.

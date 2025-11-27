@@ -47,6 +47,13 @@ tmatools(
   output_dir = here::here("tmp/test0002")
 )
 
+# full thing in one function
+tmatools(
+  tma_dirs = here::here(c("inst/extdata/tma1", "inst/extdata/tma1b")),
+  biomarker_rules_file = here::here("inst/extdata/biomarker_rules_enoc.xlsx"),
+  output_dir = here::here("tmp/test_reconsolidation")
+)
+
 
 # full thing in one function
 tmatools(

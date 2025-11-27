@@ -59,7 +59,7 @@ translate_scores <- function(
     dplyr::mutate(
       dplyr::across(
         dplyr::everything(),
-        ~ dplyr::if_else(is.na(.), "x", .)
+        ~ dplyr::if_else(is.na(.), "Unk", .)
       )
     )
 
@@ -82,7 +82,7 @@ translate_scores <- function(
           biomarker_name
         )
       )
-      biomarkers_data[[paste0(biomarker_name, ".c0")]] <- "x"
+      biomarkers_data[[paste0(biomarker_name, ".c0")]] <- "Unk"
     }
     # check if all TMA cores are covered by the dictionary
     biomarker_columns <- colnames(biomarkers_data)[
@@ -95,7 +95,7 @@ translate_scores <- function(
     original_scores <- names(translation_dict[[biomarker_name]])
     .invalid_scores <- setdiff(
       unique_scores,
-      original_scores
+      c(original_scores, "Unk")
     )
     if (length(.invalid_scores) > 0) {
       if ("quantitative" %in% original_scores) {
@@ -131,6 +131,9 @@ translate_scores <- function(
           dplyr::matches(paste0(biomarker_name, "\\.c\\d+")),
           ~ {
             dict <- translation_dict[[biomarker_name]]
+            if (!("Unk" %in% names(dict))) {
+              dict[["Unk"]] <- "Unk"
+            }
             if (!("quantitative" %in% names(dict))) {
               return(dict[as.character(.x)])
             }

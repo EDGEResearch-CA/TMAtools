@@ -86,12 +86,21 @@ tmatools <- function(
     cli::cli_abort(msg)
   }
 
+  # Keep track of metadata columns
+  metadata_columns <- character()
+
   # run TMAtools pipeline for each TMA directory
   all_spreadsheets <- setNames(
     vector("list", length(tma_dirs)),
     basename(tma_dirs)
   )
   for (tma_dir in tma_dirs) {
+    cli::cli_h1(
+      paste0(
+        "Processing TMA: ",
+        basename(tma_dir)
+      )
+    )
     metadata_file <- list.files(
       path = tma_dir,
       pattern = "*metadata*",
@@ -110,6 +119,14 @@ tmatools <- function(
         metadata_file[1]
       )
     }
+    # keep track of new metadata columns
+    metadata_columns <- c(
+      metadata_columns,
+      setdiff(
+        colnames(metadata),
+        c(metadata_columns, "tma_id", "core_id", "accession_id")
+      )
+    )
     metadata$core_id <- as.character(metadata$core_id)
     metadata$accession_id <- as.character(metadata$accession_id)
 
@@ -180,7 +197,25 @@ tmatools <- function(
         " but have no matching biomarker name in the translation/consolidation rules: ",
         paste0(in_data_but_not_in_trans, collapse = ","),
         ". Biomarkers in translation/consolidation rules: ",
-        paste0(translation_dict_biomarkers, collapse = ", ")
+        paste0(translation_dict_biomarkers, collapse = ", "),
+        ". Issue comes from the tma_dir: '",
+        tma_dir,
+        "'"
+      )
+      cli::cli_abort(msg)
+    }
+    invalid_biomarkers <- stringr::str_subset(
+      biomarkers_with_data,
+      "\\.c\\d+"
+    )
+    if (length(invalid_biomarkers) > 0) {
+      msg <- paste0(
+        "The following biomarkers have invalid names: ",
+        paste0(invalid_biomarkers, collapse = ", "),
+        ". Issue comes from the tma_dir: '",
+        tma_dir,
+        "'. Biomarker names must not match the pattern: ",
+        "anything-dot-c-digit (e.g., something.c1, foo.c2, bar.c3)"
       )
       cli::cli_abort(msg)
     }
@@ -227,14 +262,22 @@ tmatools <- function(
   }
 
   all_spreadsheets <- dplyr::bind_rows(all_spreadsheets)
-  ordered_cols <- c("tma_id", "core_id", "accession_id")
+  ordered_cols <- unique(
+    c("accession_id", "tma_id", "core_id", sort(metadata_columns))
+  )
   ordered_cols <- c(
     ordered_cols,
     sort(
       setdiff(colnames(all_spreadsheets), ordered_cols)
     )
   )
-  all_spreadsheets <- all_spreadsheets[, ordered_cols, drop = FALSE]
+  all_spreadsheets <- all_spreadsheets[, ordered_cols, drop = FALSE] |>
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::all_of(metadata_columns),
+        ~ dplyr::if_else(is.na(.), "Unk", .)
+      )
+    )
 
   if (length(tma_dirs) == 1) {
     # if only 1 tma (one folder being processed)
@@ -262,57 +305,94 @@ tmatools <- function(
     return(all_spreadsheets)
   }
 
-  message(
-    "The following accession IDs are replicated across different TMAs: ",
-    paste(replicated_acc_id, collapse = ", ")
-  )
-
   replicated <- all_spreadsheets |>
-    dplyr::filter(accession_id %in% replicated_acc_id)
+    dplyr::filter(accession_id %in% replicated_acc_id) |>
+    dplyr::arrange(accession_id)
   replicated_tmas <- unique(
     all_spreadsheets$tma_id[
       all_spreadsheets$accession_id %in% replicated_acc_id
     ]
   )
-  replicated_tma_dirs <- tma_dirs[
-    basename(tma_dirs) %in% replicated_tmas
-  ]
+  cli::cli_h1("Reconsolidation step")
+  cli::cli_alert_info(
+    paste0(
+      "The following accession IDs are replicated across different TMAs: ",
+      paste0(replicated_acc_id, collapse = ", "),
+      ". The replicates come from the following TMAs: ",
+      paste0(replicated_tmas, collapse = ", "),
+      ". {.strong Reconsolidating repeated cases.}"
+    )
+  )
+  non_biomarker_columns <- c(
+    "accession_id",
+    "tma_id",
+    "core_id",
+    metadata_columns
+  )
   de_replicated <- replicated |>
     dplyr::select(
-      tma_id,
-      accession_id,
-      dplyr::matches("\\.c\\d+")
+      dplyr::all_of(non_biomarker_columns),
+      dplyr::matches("\\.c\\d+"),
+      -dplyr::matches("\\.c0")
     ) |>
     tidyr::pivot_longer(
       cols = dplyr::matches("\\.c\\d+"),
       names_to = "biomarker_core"
     ) |>
     dplyr::mutate(
-      biomarker = gsub("\\.c\\d+", "", biomarker_core)
+      biomarker = stringr::str_remove(biomarker_core, "\\.c\\d+")
     ) |>
     dplyr::group_by(
       accession_id,
       biomarker
     ) |>
     dplyr::mutate(
-      new_biomarker_core = paste0(
+      biomarker_core = paste0(
         biomarker,
         ".c",
         dplyr::row_number()
+      ),
+      dplyr::across(
+        dplyr::all_of(setdiff(non_biomarker_columns, "accession_id")),
+        function(x) paste0(unique(x), collapse = ";")
       )
     ) |>
     dplyr::ungroup() |>
     tidyr::pivot_wider(
-      id_cols = accession_id,
-      names_from = new_biomarker_core,
+      id_cols = dplyr::all_of(non_biomarker_columns),
+      names_from = biomarker_core,
       values_from = value
     )
 
-  no_replicated <- all_spreadsheets |>
-    dplyr::filter(!(accession_id %in% replicated_acc_id))
+  de_replicated_reconsolidated <- consolidate_scores(
+    biomarkers_data = de_replicated,
+    biomarker_rules_file = biomarker_rules_file
+  )
 
-  return(list(
-    replicated = de_replicated,
-    unique = no_replicated
-  ))
+  reconsolidated_all <- dplyr::bind_rows(
+    all_spreadsheets |>
+      dplyr::filter(!(accession_id %in% replicated_acc_id)),
+    de_replicated_reconsolidated
+  )
+
+  # recompute ordered columns
+  ordered_cols <- unique(
+    c("accession_id", "tma_id", "core_id", sort(metadata_columns))
+  )
+  ordered_cols <- c(
+    ordered_cols,
+    sort(
+      setdiff(colnames(reconsolidated_all), ordered_cols)
+    )
+  )
+
+  reconsolidated_all <- reconsolidated_all[, ordered_cols, drop = FALSE]
+
+  writexl::write_xlsx(
+    reconsolidated_all,
+    path = file.path(output_dir, final_tma_file),
+    col_names = TRUE
+  )
+
+  return(reconsolidated_all)
 }
