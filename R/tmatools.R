@@ -55,6 +55,37 @@ tmatools <- function(
   consolidated_prefix <- tools::file_path_sans_ext(
     basename(consolidated_tma_file)
   )
+  # grab biomarkers in translation dict and consolidation rules
+  translation_dict_biomarkers <- names(
+    get_translation_dictionary(biomarker_rules_file)
+  )
+  consolidation_rules_biomarkers <- unique(
+    get_consolidation_rules_df(biomarker_rules_file)$biomarker
+  )
+  # ensure all biomarkers in both translation and consolidation vectors
+  in_trans_but_not_in_cons <- setdiff(
+    translation_dict_biomarkers,
+    consolidation_rules_biomarkers
+  )
+  in_cons_but_not_in_trans <- setdiff(
+    consolidation_rules_biomarkers,
+    translation_dict_biomarkers
+  )
+  if (length(in_trans_but_not_in_cons) > 0) {
+    msg <- paste0(
+      "Biomarkers in translation but not in consolidation rules: ",
+      paste0(in_trans_but_not_in_cons, collapse = ", "),
+    )
+    cli::cli_abort(msg)
+  }
+  if (length(in_cons_but_not_in_trans) > 0) {
+    msg <- paste0(
+      "Biomarkers in consolidaton but not in translation rules: ",
+      paste0(in_cons_but_not_in_trans, collapse = ", ")
+    )
+    cli::cli_abort(msg)
+  }
+
   # run TMAtools pipeline for each TMA directory
   all_spreadsheets <- setNames(
     vector("list", length(tma_dirs)),
@@ -127,6 +158,33 @@ tmatools <- function(
       ),
       biomarker_sheet_index = biomarker_sheet_index
     )
+    # check that all biomarkers have translation/consolidation rules
+    # (just need to check translation since translation and consolidation
+    # have the same biomarkers)
+    biomarkers_with_data <- readxl::excel_sheets(
+      file.path(
+        output_dir,
+        .combined_tma_file
+      )
+    )
+    biomarkers_with_data <- biomarkers_with_data[
+      biomarkers_with_data != "TMA map"
+    ]
+    in_data_but_not_in_trans <- setdiff(
+      biomarkers_with_data,
+      translation_dict_biomarkers
+    )
+    if (length(in_data_but_not_in_trans) > 0) {
+      msg <- paste0(
+        "The following biomarkers were retrieved from score sheets' tab names",
+        " but have no matching biomarker name in the translation/consolidation rules: ",
+        paste0(in_data_but_not_in_trans, collapse = ","),
+        ". Biomarkers in translation/consolidation rules: ",
+        paste0(translation_dict_biomarkers, collapse = ", ")
+      )
+      cli::cli_abort(msg)
+    }
+
     # deconvolute combined TMA dataset
     deconvolute(
       tma_file = file.path(
