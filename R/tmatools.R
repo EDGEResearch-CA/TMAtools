@@ -168,13 +168,15 @@ tmatools <- function(
     all_spreadsheets[[basename(tma_dir)]] <- consolidated_data
   }
 
-  all_spreadsheets <- dplyr::bind_rows(all_spreadsheets) |>
-    dplyr::select(
-      tma_id,
-      core_id,
-      accession_id,
-      dplyr::everything()
+  all_spreadsheets <- dplyr::bind_rows(all_spreadsheets)
+  ordered_cols <- c("tma_id", "core_id", "accession_id")
+  ordered_cols <- c(
+    ordered_cols,
+    sort(
+      setdiff(colnames(all_spreadsheets), ordered_cols)
     )
+  )
+  all_spreadsheets <- all_spreadsheets[, ordered_cols, drop = FALSE]
 
   if (length(tma_dirs) == 1) {
     # if only 1 tma (one folder being processed)
