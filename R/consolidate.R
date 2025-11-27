@@ -6,7 +6,8 @@
 #' "biomarker", "rule_type", "rule_value", "consolidated_value".
 #' @param output_file Optional path to the output file. If NULL, the function will not save the output.
 #' @param biomarkers_data Optinally, pass a data.frame or tibble with biomarker data
-#' instead of passing `biomarkers_file`. Used for reconsolidation in `tmatools()`
+#' instead of passing `biomarkers_file`. Used during re-consolidation in `tmatools()`.
+#' @param late_na_ok If TRUE, NA values do not trigger error. Used during re-consolidation in `tmatools()`.
 #' @return A data frame with translated biomarker scores.
 #' @export
 #' @examples
@@ -48,7 +49,8 @@ consolidate_scores <- function(
   biomarkers_file = NULL,
   biomarker_rules_file = NULL,
   output_file = NULL,
-  biomarkers_data = NULL
+  biomarkers_data = NULL,
+  late_na_ok = FALSE
 ) {
   consolidation_df <- get_consolidation_rules_df(
     biomarker_rules_file = biomarker_rules_file
@@ -115,7 +117,8 @@ consolidate_scores <- function(
       function(scores) {
         consolidate_single_patient(
           rules_df = rules_df,
-          scores = unname(scores)
+          scores = unname(scores),
+          late_na_ok = late_na_ok
         )
       }
     )
@@ -123,15 +126,18 @@ consolidate_scores <- function(
 
   ## SAFETY CHECK for consolidation ----
   # check for any NA's in nominal scores
-  # if any NA it is probably some numerical score that is not covered in the dictionary
+  # if any NA it is probably some numerical score that is not covered in the dictionary,
+  # unless you are re-consolidating, in which case NAs are expected (eg,
+  # if some Accession ID was repeated across TMAs, but not with the same number
+  # of cores (should set late_na_ok=TRUE in that case).
 
-  if (any(!complete.cases(biomarkers_data))) {
+  if (any(!complete.cases(biomarkers_data)) && !late_na_ok) {
     biomarkers_data_with_na <- biomarkers_data[
       !complete.cases(biomarkers_data),
     ]
     print(biomarkers_data_with_na)
     cli::cli_abort(
-      "The cases above contain some NA after replacing numerical scores with nominal scores."
+      "The cases above contain some NA after consolidation."
     )
   }
 
@@ -215,14 +221,24 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
 #' @param rules_df data.frame with consolidation rules for a single biomarker
 #' @param scores character vector with all scores for a given biomarker/patient
 #' @param unknow_values character vector with values treated as unknown.
+#' @param late_na_ok If TRUE, NAs do not trigger error. Used for re-consolidation.
 #' Defaults to `c("Unk", "x")`.
+#' @return consolidated value (as character).
 consolidate_single_patient <- function(
   rules_df,
   scores,
-  unknown_values = c("Unk", "x")
+  unknown_values = c("Unk", "x"),
+  late_na_ok = FALSE
 ) {
   if (any(is.na(scores))) {
-    cli::cli_abort("Scores contain NA values.")
+    if (!late_na_ok) {
+      cli::cli_abort("Scores contain NA values.")
+    } else {
+      if (all(is.na(scores))) {
+        return("Unk")
+      }
+      scores <- scores[!is.na(scores)]
+    }
   }
 
   if (all(scores %in% unknown_values)) {
@@ -242,7 +258,7 @@ consolidate_single_patient <- function(
   } else {
     if (rules_df$rule_type == "mean") {
       valid_scores <- scores[!(scores %in% unknown_values)]
-      return(mean(as.numeric(valid_scores)))
+      return(as.character(mean(as.numeric(valid_scores))))
     }
   }
 

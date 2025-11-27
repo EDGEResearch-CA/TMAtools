@@ -9,6 +9,8 @@
 #' - One excel file with "clean_tma" in the file name
 #' @param output_file The name of the output file.
 #' @param biomarker_sheet_index The index of the sheet used for ALL files for the biomarker scores.
+#' @param valid_biomarkers Optional character vector of biomarkers to check against.
+#' @param tma_name name of TMA used in error message only.
 #' @return List of data frames (invisible).
 #' @export
 #' @examples
@@ -24,7 +26,9 @@
 combine_tma_spreadsheets <- function(
   tma_dir,
   output_file = "combined_tma_spreadsheet.xlsx",
-  biomarker_sheet_index = 2
+  biomarker_sheet_index = 2,
+  valid_biomarkers = NULL,
+  tma_name = NULL
 ) {
   tma_files <- list.files(
     path = tma_dir,
@@ -52,6 +56,30 @@ combine_tma_spreadsheets <- function(
       readxl::excel_sheets(file)[biomarker_sheet_index]
     }
   )
+
+  if (!is.null(valid_biomarkers)) {
+    invalid_biomarkers <- setdiff(
+      biomarker_sheet_names,
+      valid_biomarkers
+    )
+    if (length(invalid_biomarkers) > 0) {
+      tma_info <- ""
+      if (!is.null(tma_name)) {
+        tma_info <- paste0(" (", tma_name, ")")
+      }
+      msg <- paste0(
+        "FATAL - the following score sheet tab names do not match any biomarker in ",
+        "translation/consolidation dictionaries",
+        tma_info,
+        ": ",
+        paste0(invalid_biomarkers, collapse = ", "),
+        ". Please check if biomarker_sheet_index=",
+        biomarker_sheet_index,
+        " is correct or if translation/consolidation dictionaries contain typos."
+      )
+      cli::cli_abort(msg)
+    }
+  }
 
   # Loop through each file and read the fourth tab (score sheet)
   biomarker_data_list <- setNames(

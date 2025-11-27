@@ -10,7 +10,6 @@
 #' @param consolidated_tma_file The name of the consolidated TMA file.
 #' @param final_tma_file The name of the final file containing the consolidated scores from multiple TMAs processed.
 #' @param biomarker_sheet_index The index of the biomarker sheet in the TMA file.
-#' @param required_biomarkers A character vector of required biomarkers.
 #' @return NULL
 #' @export
 #' @examples
@@ -33,8 +32,7 @@ tmatools <- function(
   translated_tma_file = "3_translated_tma.xlsx",
   consolidated_tma_file = "4_consolidated_tma.xlsx",
   final_tma_file = "5_final_consolidated_tmas.xlsx",
-  biomarker_sheet_index = 2,
-  required_biomarkers = c("ER", "TP53")
+  biomarker_sheet_index = 2
 ) {
   for (tma_dir in tma_dirs) {
     if (!dir.exists(tma_dir)) {
@@ -173,7 +171,8 @@ tmatools <- function(
         output_dir,
         .combined_tma_file
       ),
-      biomarker_sheet_index = biomarker_sheet_index
+      biomarker_sheet_index = biomarker_sheet_index,
+      valid_biomarkers = translation_dict_biomarkers
     )
     # check that all biomarkers have translation/consolidation rules
     # (just need to check translation since translation and consolidation
@@ -346,6 +345,7 @@ tmatools <- function(
       accession_id,
       biomarker
     ) |>
+    dplyr::filter(!is.na(value)) |>
     dplyr::mutate(
       biomarker_core = paste0(
         biomarker,
@@ -366,7 +366,8 @@ tmatools <- function(
 
   de_replicated_reconsolidated <- consolidate_scores(
     biomarkers_data = de_replicated,
-    biomarker_rules_file = biomarker_rules_file
+    biomarker_rules_file = biomarker_rules_file,
+    late_na_ok = TRUE
   )
 
   reconsolidated_all <- dplyr::bind_rows(

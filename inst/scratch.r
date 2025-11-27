@@ -57,7 +57,23 @@ tmatools(
 
 # full thing in one function
 tmatools(
-  tma_dir = here::here("tmp/tma3"),
+  tma_dirs = here::here("tmp/tma3"),
   biomarker_rules_file = here::here("tmp/biomarker_rules_enoc2.xlsx"),
   output_dir = here::here("tmp/newtest3")
+)
+
+tma_dirs = c("tmp/17-007", "tmp/19-010")
+biomarker_rules_file = here::here("tmp/biomarker_rules_Fabian.xlsx")
+output_dir = here::here("tmp/fabian")
+combined_tma_file = "1_combined_tma.xlsx"
+deconvoluted_tma_file = "2_deconvoluted_tma.xlsx"
+translated_tma_file = "3_translated_tma.xlsx"
+consolidated_tma_file = "4_consolidated_tma.xlsx"
+final_tma_file = "5_final_consolidated_tmas.xlsx"
+biomarker_sheet_index = 4
+tmatools(
+  tma_dirs = c("tmp/17-007", "tmp/19-010"),
+  biomarker_rules_file = "tmp/biomarker_rules_Fabian.xlsx",
+  output_dir = "tmp/fabian",
+  biomarker_sheet_index = 4
 )
