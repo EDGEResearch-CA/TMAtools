@@ -6,9 +6,10 @@ This function consolidates biomarker scores for each case.
 
 ``` r
 consolidate_scores(
-  biomarkers_file,
+  biomarkers_file = NULL,
   biomarker_rules_file = NULL,
-  output_file = NULL
+  output_file = NULL,
+  biomarkers_data = NULL
 )
 ```
 
@@ -28,6 +29,12 @@ consolidate_scores(
 
   Optional path to the output file. If NULL, the function will not save
   the output.
+
+- biomarkers_data:
+
+  Optinally, pass a data.frame or tibble with biomarker data instead of
+  passing `biomarkers_file`. Used for reconsolidation in
+  [`tmatools()`](https://edgeresearch-ca.github.io/tmatools/reference/tmatools.md)
 
 ## Value
 
