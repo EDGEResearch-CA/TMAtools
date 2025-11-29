@@ -9,7 +9,8 @@ consolidate_scores(
   biomarkers_file = NULL,
   biomarker_rules_file = NULL,
   output_file = NULL,
-  biomarkers_data = NULL
+  biomarkers_data = NULL,
+  late_na_ok = FALSE
 )
 ```
 
@@ -33,8 +34,14 @@ consolidate_scores(
 - biomarkers_data:
 
   Optinally, pass a data.frame or tibble with biomarker data instead of
-  passing `biomarkers_file`. Used for reconsolidation in
-  [`tmatools()`](https://edgeresearch-ca.github.io/tmatools/reference/tmatools.md)
+  passing `biomarkers_file`. Used during re-consolidation in
+  [`tmatools()`](https://edgeresearch-ca.github.io/tmatools/reference/tmatools.md).
+
+- late_na_ok:
+
+  If TRUE, NA values do not trigger error. Used during re-consolidation
+  in
+  [`tmatools()`](https://edgeresearch-ca.github.io/tmatools/reference/tmatools.md).
 
 ## Value
 

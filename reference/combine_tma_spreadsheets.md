@@ -10,7 +10,9 @@ spreadsheet that can be used for deconvolution with
 combine_tma_spreadsheets(
   tma_dir,
   output_file = "combined_tma_spreadsheet.xlsx",
-  biomarker_sheet_index = 2
+  biomarker_sheet_index = 2,
+  valid_biomarkers = NULL,
+  tma_name = NULL
 )
 ```
 
@@ -34,6 +36,14 @@ combine_tma_spreadsheets(
 - biomarker_sheet_index:
 
   The index of the sheet used for ALL files for the biomarker scores.
+
+- valid_biomarkers:
+
+  Optional character vector of biomarkers to check against.
+
+- tma_name:
+
+  name of TMA used in error message only.
 
 ## Value
 

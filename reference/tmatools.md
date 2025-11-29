@@ -16,8 +16,7 @@ tmatools(
   translated_tma_file = "3_translated_tma.xlsx",
   consolidated_tma_file = "4_consolidated_tma.xlsx",
   final_tma_file = "5_final_consolidated_tmas.xlsx",
-  biomarker_sheet_index = 2,
-  required_biomarkers = c("ER", "TP53")
+  biomarker_sheet_index = 2
 )
 ```
 
@@ -51,10 +50,6 @@ tmatools(
 - biomarker_sheet_index:
 
   The index of the biomarker sheet in the TMA file.
-
-- required_biomarkers:
-
-  A character vector of required biomarkers.
 
 ## Examples
 

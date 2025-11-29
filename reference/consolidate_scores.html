@@ -42,7 +42,8 @@
 <span>  biomarkers_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  biomarker_rules_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  biomarkers_data <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  biomarkers_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  late_na_ok <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -66,7 +67,11 @@ It must contain a sheet named "consolidation" with columns
 
 <dt id="arg-biomarkers-data">biomarkers_data<a class="anchor" aria-label="anchor" href="#arg-biomarkers-data"></a></dt>
 <dd><p>Optinally, pass a data.frame or tibble with biomarker data
-instead of passing <code>biomarkers_file</code>. Used for reconsolidation in <code><a href="tmatools.html">tmatools()</a></code></p></dd>
+instead of passing <code>biomarkers_file</code>. Used during re-consolidation in <code><a href="tmatools.html">tmatools()</a></code>.</p></dd>
+
+
+<dt id="arg-late-na-ok">late_na_ok<a class="anchor" aria-label="anchor" href="#arg-late-na-ok"></a></dt>
+<dd><p>If TRUE, NA values do not trigger error. Used during re-consolidation in <code><a href="tmatools.html">tmatools()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

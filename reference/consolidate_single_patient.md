@@ -5,7 +5,12 @@ Assess consolidated score per patient
 ## Usage
 
 ``` r
-consolidate_single_patient(rules_df, scores, unknown_values = c("Unk", "x"))
+consolidate_single_patient(
+  rules_df,
+  scores,
+  unknown_values = c("Unk", "x"),
+  late_na_ok = FALSE
+)
 ```
 
 ## Arguments
@@ -18,7 +23,15 @@ consolidate_single_patient(rules_df, scores, unknown_values = c("Unk", "x"))
 
   character vector with all scores for a given biomarker/patient
 
+- late_na_ok:
+
+  If TRUE, NAs do not trigger error. Used for re-consolidation. Defaults
+  to `c("Unk", "x")`.
+
 - unknow_values:
 
-  character vector with values treated as unknown. Defaults to
-  `c("Unk", "x")`.
+  character vector with values treated as unknown.
+
+## Value
+
+consolidated value (as character).
