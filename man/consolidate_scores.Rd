@@ -8,7 +8,8 @@ consolidate_scores(
   biomarkers_file = NULL,
   biomarker_rules_file = NULL,
   output_file = NULL,
-  biomarkers_data = NULL
+  biomarkers_data = NULL,
+  late_na_ok = FALSE
 )
 }
 \arguments{
@@ -21,7 +22,9 @@ It must contain a sheet named "consolidation" with columns
 \item{output_file}{Optional path to the output file. If NULL, the function will not save the output.}
 
 \item{biomarkers_data}{Optinally, pass a data.frame or tibble with biomarker data
-instead of passing \code{biomarkers_file}. Used for reconsolidation in \code{tmatools()}}
+instead of passing \code{biomarkers_file}. Used during re-consolidation in \code{tmatools()}.}
+
+\item{late_na_ok}{If TRUE, NA values do not trigger error. Used during re-consolidation in \code{tmatools()}.}
 }
 \value{
 A data frame with translated biomarker scores.

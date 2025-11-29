@@ -74,6 +74,6 @@ biomarker_sheet_index = 4
 tmatools(
   tma_dirs = c("tmp/17-007", "tmp/19-010"),
   biomarker_rules_file = "tmp/biomarker_rules_Fabian.xlsx",
-  output_dir = "tmp/fabian",
+  output_dir = "tmp/fabian2",
   biomarker_sheet_index = 4
 )

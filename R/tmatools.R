@@ -319,7 +319,7 @@ tmatools <- function(
       paste0(replicated_acc_id, collapse = ", "),
       ". The replicates come from the following TMAs: ",
       paste0(replicated_tmas, collapse = ", "),
-      ". {.strong Reconsolidating repeated cases.}"
+      ". {.strong Repeated cases will be reconsolidated}."
     )
   )
   non_biomarker_columns <- c(

@@ -91,7 +91,7 @@ combine_tma_spreadsheets <- function(
     biomarker_sheet_name <- biomarker_sheet_names[[i]]
 
     # Read the biomarker sheet
-    biomarker_data_list[[biomarker_sheet_name]] <- readxl::read_excel(
+    d <- readxl::read_excel(
       file_path,
       sheet = biomarker_sheet_name,
       trim_ws = FALSE,
@@ -100,6 +100,27 @@ combine_tma_spreadsheets <- function(
       .name_repair = "minimal",
       range = readxl::cell_limits(c(1, 1), c(NA, NA))
     )
+    # format input to address potential double precision issues
+    # eg, 28.000000004 -> 28
+    m <- tibble::as_tibble(
+      t(
+        apply(
+          d,
+          1,
+          function(x) {
+            x_num <- suppressWarnings(round(as.numeric(x), 5))
+            x[!is.na(x_num)] <- format(
+              x_num[!is.na(x_num)],
+              trim = TRUE,
+              drop0trailing = TRUE
+            )
+            return(x)
+          }
+        )
+      ),
+      .name_repair = "minimal"
+    )
+    biomarker_data_list[[biomarker_sheet_name]] <- m
   }
 
   tma_map_list <- list(

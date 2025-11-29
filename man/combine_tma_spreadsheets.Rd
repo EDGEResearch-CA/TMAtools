@@ -7,7 +7,9 @@
 combine_tma_spreadsheets(
   tma_dir,
   output_file = "combined_tma_spreadsheet.xlsx",
-  biomarker_sheet_index = 2
+  biomarker_sheet_index = 2,
+  valid_biomarkers = NULL,
+  tma_name = NULL
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ must contain:
 \item{output_file}{The name of the output file.}
 
 \item{biomarker_sheet_index}{The index of the sheet used for ALL files for the biomarker scores.}
+
+\item{valid_biomarkers}{Optional character vector of biomarkers to check against.}
+
+\item{tma_name}{name of TMA used in error message only.}
 }
 \value{
 List of data frames (invisible).

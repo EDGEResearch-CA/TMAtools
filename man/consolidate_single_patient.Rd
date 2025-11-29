@@ -4,15 +4,25 @@
 \alias{consolidate_single_patient}
 \title{Assess consolidated score per patient}
 \usage{
-consolidate_single_patient(rules_df, scores, unknown_values = c("Unk", "x"))
+consolidate_single_patient(
+  rules_df,
+  scores,
+  unknown_values = c("Unk", "x"),
+  late_na_ok = FALSE
+)
 }
 \arguments{
 \item{rules_df}{data.frame with consolidation rules for a single biomarker}
 
 \item{scores}{character vector with all scores for a given biomarker/patient}
 
-\item{unknow_values}{character vector with values treated as unknown.
+\item{late_na_ok}{If TRUE, NAs do not trigger error. Used for re-consolidation.
 Defaults to \code{c("Unk", "x")}.}
+
+\item{unknow_values}{character vector with values treated as unknown.}
+}
+\value{
+consolidated value (as character).
 }
 \description{
 Assess consolidated score per patient
