@@ -42,9 +42,15 @@ tma_dirs <- c(
  system.file("extdata", "tma1", package = "TMAtools"),
  system.file("extdata", "tma2", package = "TMAtools")
 )
+# spreadsheet with translation and consolidation rules
+biomarker_rules_file <- system.file(
+  "extdata", "biomarker_rules_example.xlsx",
+  package = "TMAtools"
+)
 # Run the TMAtools pipeline
 tmatools(
   tma_dirs = tma_dirs,
+  biomarker_rules_file = biomarker_rules_file,
   output_dir = "tmatools_output"
 )
 }
