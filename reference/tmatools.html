@@ -97,12 +97,38 @@ and translates numerical biomarker scores to nominal scores.</p>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tma1"</span>, package <span class="op">=</span> <span class="st">"TMAtools"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tma2"</span>, package <span class="op">=</span> <span class="st">"TMAtools"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># spreadsheet with translation and consolidation rules</span></span></span>
+<span class="r-in"><span><span class="va">biomarker_rules_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"extdata"</span>, <span class="st">"biomarker_rules_example.xlsx"</span>,</span></span>
+<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"TMAtools"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Run the TMAtools pipeline</span></span></span>
 <span class="r-in"><span><span class="fu">tmatools</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  tma_dirs <span class="op">=</span> <span class="va">tma_dirs</span>,</span></span>
+<span class="r-in"><span>  biomarker_rules_file <span class="op">=</span> <span class="va">biomarker_rules_file</span>,</span></span>
 <span class="r-in"><span>  output_dir <span class="op">=</span> <span class="st">"tmatools_output"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in tmatools(tma_dirs = tma_dirs, output_dir = "tmatools_output"):</span> argument "biomarker_rules_file" is missing, with no default</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Processing TMA: tma1</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding placeholder column for biomarker PTEN</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Processing TMA: tma2</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 36 × 17</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    accession_id tma_id core_id age   sex   ER.c1     ER.c2 ER.c3 PTEN.c0 PTEN.c1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> pt1.tma1     tma1   1       1     m     Unk       Unk   Unk   Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> pt4.tma1     tma1   4       2     f     diffuse … nega… nega… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> pt10.tma1    tma1   10      52    f     Unk       Unk   nega… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> pt13.tma1    tma1   13      51    f     Unk       foca… foca… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> pt3.tma1     tma1   3       2     f     diffuse … Unk   foca… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> pt12.tma1    tma1   12      54    f     Unk       Unk   Unk   Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> pt5.tma1     tma1   5       0     Unk   diffuse … diff… diff… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> pt14.tma1    tma1   14      54    f     focal (1… diff… foca… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> pt2.tma1     tma1   2       1     m     focal (1… diff… diff… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> pt11.tma1    tma1   11      45    f     diffuse … Unk   nega… Unk     <span style="color: #BB0000;">NA</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 26 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: PTEN.c2 &lt;chr&gt;, er &lt;chr&gt;, p53 &lt;chr&gt;, p53.c1 &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   p53.c2 &lt;chr&gt;, p53.c3 &lt;chr&gt;, pten &lt;chr&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
