@@ -88,16 +88,65 @@
 <span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tma2"</span>, package <span class="op">=</span> <span class="st">"TMAtools"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co"># spreadsheet with translation and consolidation rules</span></span>
+<span><span class="co"># for the examples tma1 and tma2</span></span>
 <span><span class="va">biomarker_rules_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">"extdata"</span>, <span class="st">"biomarker_rules_example.xlsx"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"TMAtools"</span></span>
 <span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Run the TMAtools pipeline</span></span>
 <span><span class="fu"><a href="reference/tmatools.html">tmatools</a></span><span class="op">(</span></span>
 <span>  tma_dirs <span class="op">=</span> <span class="va">tma_dirs</span>,</span>
 <span>  biomarker_rules_file <span class="op">=</span> <span class="va">biomarker_rules_file</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="st">"tmatools_output"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="processing-your-own-data">Processing your own data<a class="anchor" aria-label="anchor" href="#processing-your-own-data"></a>
+</h2>
+<p>To process your own data, <code>TMAtools</code> requires two main inputs: a <strong>biomarker rules file</strong> and one or more <strong>TMA folders</strong>, as explained below.</p>
+<div class="section level3">
+<h3 id="biomarkers-rule-file">Biomarkers rule file<a class="anchor" aria-label="anchor" href="#biomarkers-rule-file"></a>
+</h3>
+<p>Excel file containing translation and consolidation rules. It must be placed outside TMA folders. Column names should match the template file <code>biomarker_rules_example.xlsx</code>. You can create a copy of this file as follows.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">example_rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"extdata"</span>, <span class="st">"biomarker_rules_example.xlsx"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"TMAtools"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">example_rules</span>, <span class="st">"biomarker_rules_example_copy.xlsx"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="full-template-for-ihc-biomarkers-and-customization">Full template for IHC biomarkers and customization<a class="anchor" aria-label="anchor" href="#full-template-for-ihc-biomarkers-and-customization"></a>
+</h4>
+<p>TMAtools also includes another rules template file called <code>biomarker_rules_example.xlsx</code>, which contains translation and consolidation rules for 19 different biomarkers applied to studying Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your own customization with the code below.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">enoc_rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"extdata"</span>, <span class="st">"biomarker_rules_enoc.xlsx"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"TMAtools"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">enoc_rules</span>, <span class="st">"biomarker_rules_enoc_copy.xlsx"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="tma-folders">TMA folders<a class="anchor" aria-label="anchor" href="#tma-folders"></a>
+</h3>
+<p>There must be one folder per TMA (the folder name will be used as a label in output files). Each TMA folder should contain the files below.</p>
+<div class="section level4">
+<h4 id="score-sheets">Score sheets<a class="anchor" aria-label="anchor" href="#score-sheets"></a>
+</h4>
+<p>Each score sheet is an Excel file with the actual scores (and potentially other tabs). There must be one score sheet per biomarker. The tab that includes the actual scores should be the same in all score sheets (controlled by the <code>biomarker_sheet_index</code> argument of the <code><a href="reference/tmatools.html">tmatools()</a></code> function). The name of the biomarker is retrieved from the name of this tab, which should match the name in the rules file. <code>TMAtools</code> will let you know if some of these don’t match.</p>
+</div>
+<div class="section level4">
+<h4 id="clean-map">Clean map<a class="anchor" aria-label="anchor" href="#clean-map"></a>
+</h4>
+<p>An Excel file containing “clean_map” in the name. This file corresponds to the sector map of your TMA that only contains the core IDs within the corresponding cells. No other annotation outside the map is allowed, as <code>TMAtools</code> uses the exact positions of core IDs to map corresponding scores.</p>
+</div>
+<div class="section level4">
+<h4 id="metadata">Metadata<a class="anchor" aria-label="anchor" href="#metadata"></a>
+</h4>
+<p>An Excel file with “metadata” in the name. In a single tab, it must contain at least two columns: “core_id” (core IDs that appear in the sector map) and “accession_id” (case or patient identifiers). Optionally, you can add other columns with additional metadata (e.g., age, sex, histotype, block number), which will be carried forward to your output files.</p>
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
