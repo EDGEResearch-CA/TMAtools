@@ -62,7 +62,28 @@ and translates numerical biomarker scores to nominal scores.</p>
 
 
 <dl><dt id="arg-tma-dirs">tma_dirs<a class="anchor" aria-label="anchor" href="#arg-tma-dirs"></a></dt>
-<dd><p>A character vector of TMA directory paths.</p></dd>
+<dd><p>A character vector of TMA directory paths.
+Each directory must contain:</p><ul><li><p><code>Score sheets</code>: one or more Excel files with biomarker scores (one biomarker per sheet).</p></li>
+<li><p><code>Clean map</code>: an Excel file with "clean_map" in the file name.
+This file corresponds to the sector map of your TMA that only contains
+the core IDs within the corresponding cells. No other annotation outside
+the map is allowed, as <code>TMAtools</code> uses the exact positions of core IDs
+to map corresponding scores.
+Optional:</p></li>
+<li><p><code>Metadata</code>: An Excel file with "metadata" in the name.
+In a single tab, it must contain at least two columns:
+"core_id" (core IDs that appear in the sector map) and "accession_id"
+(case or patient identifiers). Optionally, you can add other columns
+with additional metadata (e.g., age, sex, histotype, block number),
+which will be carried forward to your output files.</p></li>
+</ul></dd>
+
+
+<dt id="arg-biomarker-rules-file">biomarker_rules_file<a class="anchor" aria-label="anchor" href="#arg-biomarker-rules-file"></a></dt>
+<dd><p>Path to spreadsheet containing the consolidation rules for all biomarkers.
+It must contain a sheet named "consolidation" with columns
+"biomarker", "rule_type", "rule_value", "consolidated_value".
+It must not be located within any of the TMA directories being processed.</p></dd>
 
 
 <dt id="arg-output-dir">output_dir<a class="anchor" aria-label="anchor" href="#arg-output-dir"></a></dt>
@@ -77,6 +98,10 @@ and translates numerical biomarker scores to nominal scores.</p>
 <dd><p>The name of the deconvoluted TMA file.</p></dd>
 
 
+<dt id="arg-translated-tma-file">translated_tma_file<a class="anchor" aria-label="anchor" href="#arg-translated-tma-file"></a></dt>
+<dd><p>The name of the translated TMA file.</p></dd>
+
+
 <dt id="arg-consolidated-tma-file">consolidated_tma_file<a class="anchor" aria-label="anchor" href="#arg-consolidated-tma-file"></a></dt>
 <dd><p>The name of the consolidated TMA file.</p></dd>
 
@@ -86,7 +111,8 @@ and translates numerical biomarker scores to nominal scores.</p>
 
 
 <dt id="arg-biomarker-sheet-index">biomarker_sheet_index<a class="anchor" aria-label="anchor" href="#arg-biomarker-sheet-index"></a></dt>
-<dd><p>The index of the biomarker sheet in the TMA file.</p></dd>
+<dd><p>The index of the biomarker sheet in the TMA file.
+All TMA files must have the biomarker data in the same sheet index. Defaults to 2 (ie, second sheet).</p></dd>
 
 </dl></div>
 

@@ -25,12 +25,12 @@ consolidate_single_patient(
 
 - late_na_ok:
 
-  If TRUE, NAs do not trigger error. Used for re-consolidation. Defaults
-  to `c("Unk", "x")`.
+  If TRUE, NAs do not trigger error. Used for re-consolidation.
 
 - unknow_values:
 
-  character vector with values treated as unknown.
+  character vector with values treated as unknown. Defaults to
+  `c("Unk", "x")`.
 
 ## Value
 

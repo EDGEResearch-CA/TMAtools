@@ -24,7 +24,31 @@ tmatools(
 
 - tma_dirs:
 
-  A character vector of TMA directory paths.
+  A character vector of TMA directory paths. Each directory must
+  contain:
+
+  - `Score sheets`: one or more Excel files with biomarker scores (one
+    biomarker per sheet).
+
+  - `Clean map`: an Excel file with "clean_map" in the file name. This
+    file corresponds to the sector map of your TMA that only contains
+    the core IDs within the corresponding cells. No other annotation
+    outside the map is allowed, as `TMAtools` uses the exact positions
+    of core IDs to map corresponding scores. Optional:
+
+  - `Metadata`: An Excel file with "metadata" in the name. In a single
+    tab, it must contain at least two columns: "core_id" (core IDs that
+    appear in the sector map) and "accession_id" (case or patient
+    identifiers). Optionally, you can add other columns with additional
+    metadata (e.g., age, sex, histotype, block number), which will be
+    carried forward to your output files.
+
+- biomarker_rules_file:
+
+  Path to spreadsheet containing the consolidation rules for all
+  biomarkers. It must contain a sheet named "consolidation" with columns
+  "biomarker", "rule_type", "rule_value", "consolidated_value". It must
+  not be located within any of the TMA directories being processed.
 
 - output_dir:
 
@@ -38,6 +62,10 @@ tmatools(
 
   The name of the deconvoluted TMA file.
 
+- translated_tma_file:
+
+  The name of the translated TMA file.
+
 - consolidated_tma_file:
 
   The name of the consolidated TMA file.
@@ -49,7 +77,9 @@ tmatools(
 
 - biomarker_sheet_index:
 
-  The index of the biomarker sheet in the TMA file.
+  The index of the biomarker sheet in the TMA file. All TMA files must
+  have the biomarker data in the same sheet index. Defaults to 2 (ie,
+  second sheet).
 
 ## Examples
 
