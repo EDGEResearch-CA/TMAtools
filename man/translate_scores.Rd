@@ -2,7 +2,8 @@
 % Please edit documentation in R/translate.R
 \name{translate_scores}
 \alias{translate_scores}
-\title{Translate biomarker scores from numerical to nominal}
+\title{Translate biomarker scores from
+a deconvoluted TMA spreadsheet.}
 \usage{
 translate_scores(
   biomarkers_file,
@@ -11,13 +12,15 @@ translate_scores(
 )
 }
 \arguments{
-\item{biomarkers_file}{Path to the Excel file containing biomarker data.}
+\item{biomarkers_file}{Path to the Excel file containing biomarker data (ie, output from \code{deconvolute()}).}
 
-\item{biomarker_rules_file}{Path to spreadsheet containing the translation rules for all biomarkers.
-It must contain a sheet named "translation" with columns
-"biomarker", "original_score", "translated_score".}
+\item{biomarker_rules_file}{Path to spreadsheet containing the consolidation rules for all biomarkers.
+It must contain a sheet named "consolidation" with columns
+"biomarker", "rule_type", "rule_value", "consolidated_value".
+It must not be located within any of the TMA directories being processed.}
 
-\item{output_file}{Optional path to the output file. If NULL, the function will not save the output.}
+\item{output_file}{Optional path to the output file,
+which can be used as input to \code{consolidate_scores()}.}
 }
 \value{
 A data frame with translated biomarker scores.
@@ -32,12 +35,14 @@ tma_dir <- system.file("extdata", "tma1", package = "TMAtools")
 # define output files
 combined_tma_file <- "combined_tma.xlsx"
 deconvoluted_tma_file <- "deconvoluted_tma.xlsx"
-consolidated_tma_file <- "consolidated_tma.xlsx"
+translated_tma_file <- "translated_tma.xlsx"
 
 # combine TMA datasets
 combine_tma_spreadsheets(
  tma_dir = tma_dir,
- output_file = combined_tma_file
+ output_file = combined_tma_file,
+ biomarker_sheet_index = 2,
+ valid_biomarkers = c("ER", "p53") # optional, but recommended to avoid misspelling errors
 )
 
 # deconvolute combined TMA dataset
@@ -46,11 +51,15 @@ deconvolute(
    output_file = deconvoluted_tma_file
 )
 
-# translate numerical biomarker scores to nominal scores
-# and consolidate them for each case
-consolidated_data <- translate_and_consolidate_scores(
-  biomarkers_file = deconvoluted_tma_file,
-  required_biomarkers = c("ER", "TP53")
+# grab biomarker rules file
+biomarker_rules_file <- system.file("extdata", "biomarker_rules_example.xlsx",  package = "TMAtools")
+
+# translate numerical scores to nominal scores
+translated_data <- translate_scores(
+   biomarkers_file = deconvoluted_tma_file,
+   biomarker_rules_file = biomarker_rules_file,
+   output_file = translated_tma_file
 )
-head(consolidated_data)
+
+print(translated_data)
 }

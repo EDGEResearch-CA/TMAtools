@@ -17,3 +17,17 @@ navbar:
       href: https://www.edgeresearch.ca
       target: _blank
       icon: fa-microscope
+reference:
+- title: "Main function"
+  desc: >
+    Main function which runs the entire TMAtools pipeline.
+  contents: 
+  - tmatools
+- title: "Individual steps"
+  desc: >
+    Each major step in the TMAtools pipeline.
+  contents:
+  - combine_tma_spreadsheets
+  - deconvolute
+  - translate_scores
+  - consolidate_scores

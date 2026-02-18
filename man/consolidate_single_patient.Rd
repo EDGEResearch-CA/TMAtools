@@ -16,10 +16,9 @@ consolidate_single_patient(
 
 \item{scores}{character vector with all scores for a given biomarker/patient}
 
-\item{late_na_ok}{If TRUE, NAs do not trigger error. Used for re-consolidation.
-Defaults to \code{c("Unk", "x")}.}
+\item{late_na_ok}{If TRUE, NAs do not trigger error. Used for re-consolidation.}
 
-\item{unknow_values}{character vector with values treated as unknown.}
+\item{unknow_values}{character vector with values treated as unknown. Defaults to \code{c("Unk", "x")}.}
 }
 \value{
 consolidated value (as character).
@@ -27,3 +26,4 @@ consolidated value (as character).
 \description{
 Assess consolidated score per patient
 }
+\keyword{internal}

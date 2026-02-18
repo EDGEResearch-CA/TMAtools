@@ -17,3 +17,4 @@ data.frame with the translation rules.
 \description{
 Get translation dictionary from biomarker rules file
 }
+\keyword{internal}

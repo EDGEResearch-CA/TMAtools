@@ -17,3 +17,4 @@ a data.frame of consolidation rules for each biomarker.
 \description{
 Get consolidation data.frame from biomarker rules file
 }
+\keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/consolidate.R
 \name{consolidate_scores}
 \alias{consolidate_scores}
-\title{Consolidate biomarkers}
+\title{Consolidate biomarkers from a translated TMA spreadsheet.}
 \usage{
 consolidate_scores(
   biomarkers_file = NULL,
@@ -13,24 +13,32 @@ consolidate_scores(
 )
 }
 \arguments{
-\item{biomarkers_file}{Path to the Excel file containing biomarker data.}
+\item{biomarkers_file}{Path to the Excel file containing biomarker data (ie, output from \code{translate_scores()}).}
 
 \item{biomarker_rules_file}{Path to spreadsheet containing the consolidation rules for all biomarkers.
 It must contain a sheet named "consolidation" with columns
-"biomarker", "rule_type", "rule_value", "consolidated_value".}
+"biomarker", "rule_type", "rule_value", "consolidated_value".
+It must not be located within any of the TMA directories being processed.}
 
 \item{output_file}{Optional path to the output file. If NULL, the function will not save the output.}
 
-\item{biomarkers_data}{Optinally, pass a data.frame or tibble with biomarker data
-instead of passing \code{biomarkers_file}. Used during re-consolidation in \code{tmatools()}.}
+\item{biomarkers_data}{Optinally, pass a \code{data.frame} or \code{tibble} with biomarker data
+instead of passing \code{biomarkers_file}. Used during re-consolidation in \code{tmatools()}
+(usually not needed by end users).}
 
-\item{late_na_ok}{If TRUE, NA values do not trigger error. Used during re-consolidation in \code{tmatools()}.}
+\item{late_na_ok}{If TRUE, NA values do not trigger error. Used during re-consolidation in \code{tmatools()}
+(usually not needed by end users). Defaults to FALSE, which triggers an error if any NA is present in the scores to be consolidated.}
 }
 \value{
-A data frame with translated biomarker scores.
+A data frame with consolidated biomarker scores.
 }
 \description{
 This function consolidates biomarker scores for each case.
+}
+\details{
+The consolidation of individual scores will be placed in new columns with the same name as the biomarker but without the ".c1", ".c2" etc suffixes.
+For instance, if the biomarker is "ER", the consolidated score will be placed
+in a new column named "er" (lowercase). The original columns with the ".c1", ".c2" etc suffixes will be retained in the output.
 }
 \examples{
 library(TMAtools)
@@ -45,7 +53,9 @@ consolidated_tma_file <- "consolidated_tma.xlsx"
 # combine TMA datasets
 combine_tma_spreadsheets(
  tma_dir = tma_dir,
- output_file = combined_tma_file
+ output_file = combined_tma_file,
+ biomarker_sheet_index = 2,
+ valid_biomarkers = c("ER", "p53") # optional, but recommended to avoid misspelling errors
 )
 
 # deconvolute combined TMA dataset
@@ -54,17 +64,21 @@ deconvolute(
    output_file = deconvoluted_tma_file
 )
 
+# grab biomarker rules file
+biomarker_rules_file <- system.file("extdata", "biomarker_rules_example.xlsx",  package = "TMAtools")
+
 # translate numerical scores to nominal scores
 translate_scores(
    biomarkers_file = deconvoluted_tma_file,
-   biomarker_rules_file = "tmp/biomarker_rules.xlsx",
+   biomarker_rules_file = biomarker_rules_file,
    output_file = translated_tma_file
 )
 
 # and consolidate nominal scores for each case
-consolidated_data <- translate_and_consolidate_scores(
-  biomarkers_file = deconvoluted_tma_file,
-  required_biomarkers = c("ER", "TP53")
+consolidated_data <- consolidate_scores(
+  biomarkers_file = translated_tma_file,
+  output_file = consolidated_tma_file,
+  biomarker_rules_file = biomarker_rules_file
 )
-head(consolidated_data)
+print(consolidated_data)
 }

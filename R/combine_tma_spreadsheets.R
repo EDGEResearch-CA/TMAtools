@@ -2,27 +2,42 @@
 #' @description
 #' This function combines multiple TMA spreadsheets into a single spreadsheet
 #' that can be used for deconvolution with `TMAtools::deconvolute()`.
-#' @param tma_dir The directory containing the TMA spreadsheets. This directory
-#' must contain:
-#' - One or more excel files for the scores of some biomarker (s)
-#' - One excel file with "metadata" in the file name
-#' - One excel file with "clean_tma" in the file name
+#' @param tma_dir A path to a single TMA directory, which must contain:
+#' - `Score sheets`: one or more Excel files with biomarker scores (one biomarker per sheet).
+#' - `Clean map`: an Excel file with "clean_map" in the file name. 
+#' This file corresponds to the sector map of your TMA that only contains
+#' the core IDs within the corresponding cells. No other annotation outside
+#' the map is allowed, as `TMAtools` uses the exact positions of core IDs
+#' to map corresponding scores.
+#' Optional:
+#' - `Metadata`: An Excel file with "metadata" in the name.
+#' In a single tab, it must contain at least two columns:
+#' "core_id" (core IDs that appear in the sector map) and "accession_id"
+#' (case or patient identifiers). Optionally, you can add other columns
+#' with additional metadata (e.g., age, sex, histotype, block number),
+#' which will be carried forward to your output files.
 #' @param output_file The name of the output file.
 #' @param biomarker_sheet_index The index of the sheet used for ALL files for the biomarker scores.
 #' @param valid_biomarkers Optional character vector of biomarkers to check against.
 #' @param tma_name name of TMA used in error message only.
-#' @return List of data frames (invisible).
+#' @return List of data frames with combined biomarker data (scores + map).
+#' Each item of the list will be one sheet in the output Excel file.
 #' @export
 #' @examples
 #' library(TMAtools)
-#' tma_dir <- system.file("extdata", package = "TMAtools")
-#' combine_tma_spreadsheets(
-#'     tma_dir = tma_dir,
-#'     output_file = "combined_tma_spreadsheet.xlsx",
-#'     biomarker_sheet_index = 2
+#' # grab folder with example TMA datasets
+#' tma_dir <- system.file("extdata", "tma1", package = "TMAtools")
+#' # define output files
+#' combined_tma_file <- "combined_tma.xlsx"
+#'
+#' # combine TMA datasets
+#' combined_data_list <- combine_tma_spreadsheets(
+#'  tma_dir = tma_dir,
+#'  output_file = combined_tma_file,
+#'  biomarker_sheet_index = 2,
+#'  valid_biomarkers = c("ER", "p53") # optional, but recommended to avoid misspelling errors
 #' )
-#' # check the output Excel file, which should then be used as
-#' # the input for `TMAtools::deconvolute()`
+#' print(combined_data_list)
 combine_tma_spreadsheets <- function(
   tma_dir,
   output_file = "combined_tma_spreadsheet.xlsx",

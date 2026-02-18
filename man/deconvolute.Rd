@@ -2,36 +2,34 @@
 % Please edit documentation in R/deconvolute.R
 \name{deconvolute}
 \alias{deconvolute}
-\title{Deconvolute TMA map}
+\title{Deconvolute a combined TMA spreadsheet}
 \usage{
-deconvolute(
-  tma_file,
-  metadata = NULL,
-  output_file = NULL,
-  tma_id = NULL,
-  partial_overlap_ok = TRUE
-)
+deconvolute(tma_file, metadata = NULL, output_file = NULL, tma_id = NULL)
 }
 \arguments{
 \item{tma_file}{Path to input Excel spreadsheet.
 Both .xlsx and .xls formats are supported.
 Must contain one "TMA map" sheet and one or more
-biomarker-specific sheets.}
+biomarker-specific sheets (eg, output file of \code{combine_tma_spreadsheets()}).}
 
-\item{metadata}{data.frame with core_id and accession_id columns}
+\item{metadata}{Optional \code{data.frame} with at least \code{core_id} and \code{accession_id} columns,
+plus any other metadata columns that should be added to the output
+(eg, patient age, sex, etc.).}
 
 \item{output_file}{Optional path to output
-Excel spreadsheet.}
+Excel spreadsheet, which can be used as input to \code{translate_scores()}.}
 
-\item{tma_id}{TMA identifier (from the directory's name)}
-
-\item{partial_overlap_ok}{If FALSE, throws an error if the overlap
-between TMA map and score sheet is only partial (e.g., there is some
-non-empty value in the score sheet that does not match a value in the
-TMA map).}
+\item{tma_id}{Optional TMA identifier (column \code{tma_id} will be added to output).}
 }
 \value{
 A data frame with the deconvoluted data.
+}
+\description{
+Reads TMA spreadsheet from \code{tma_file}
+which must contain one "TMA map" sheet and one or more
+biomarker-specific sheets.
+}
+\details{
 The function will
 match core IDs from the TMA map sheet
 with the biomarker-specific sheets and return a
@@ -41,22 +39,34 @@ columns for each biomarker as necessary.
 For instance, if core ID 1 has 3 values for biomarker A,
 the output will contain 3 columns for biomarker A
 (A.c1, A.c2, A.c3); if another core ID has 2 values for
-biomaker A, its corresponding A.c1 and A.c2 columns will
+biomarker A, its corresponding A.c1 and A.c2 columns will
 be filled with the values for that core ID and the
-A.c3 column will be filled with NA.
+A.c3 column will be filled with \code{NA}.
 
 If there are no values for a given core ID in a
 biomarker-specific sheet, the corresponding
-columns will all be filled with NA.
-}
-\description{
-Reads TMA spreadsheet from \code{tma_file}
-which must contain one "TMA map" sheet and one or more
-biomaker-specific sheets.
+columns will all be filled with \code{NA}.
 }
 \examples{
 library(TMAtools)
-tma_file <- system.file("extdata", "example.xlsx", package = "TMAtools")
-deconvoluted_data <- deconvolute(tma_file)
-head(deconvoluted_data)
+# grab folder with example TMA datasets
+tma_dir <- system.file("extdata", "tma1", package = "TMAtools")
+# define output files
+combined_tma_file <- "combined_tma.xlsx"
+deconvoluted_tma_file <- "deconvoluted_tma.xlsx"
+
+# combine TMA datasets
+combine_tma_spreadsheets(
+ tma_dir = tma_dir,
+ output_file = combined_tma_file,
+ biomarker_sheet_index = 2,
+ valid_biomarkers = c("ER", "p53") # optional, but recommended to avoid misspelling errors
+)
+
+# deconvolute combined TMA dataset
+deconvoluted_data <- deconvolute(
+   tma_file = combined_tma_file,
+   output_file = deconvoluted_tma_file
+)
+print(deconvoluted_data)
 }

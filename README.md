@@ -25,15 +25,23 @@ remotes::install_github("EDGEResearch-CA/TMAtools")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example that comes with the package,
+containing two independent TMAs (`tma1` and `tma2`).
+The data from each TMA is located within a separate folder.
+Here, we use the `system.file()` function to grab the path to the
+`tma1` and `tma2` folders. For your own data, please replace `tma_dirs`
+with the path to your own TMA(s).
 
 ``` r
 library(TMAtools)
-# 2 directories with TMA files
+# 2 example folders with TMA files (which come with TMAtools)
 tma_dirs <- c(
  system.file("extdata", "tma1", package = "TMAtools"),
  system.file("extdata", "tma2", package = "TMAtools")
 )
+# If using your own data, raplace tma_dirs definition, eg:
+# tma_dirs <- "C:/Users/JaneDoe/Documents/my_tma"
+
 # spreadsheet with translation and consolidation rules
 # for the examples tma1 and tma2
 biomarker_rules_file <- system.file(

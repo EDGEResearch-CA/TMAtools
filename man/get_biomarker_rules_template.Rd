@@ -18,3 +18,4 @@ overwrite the contents of \code{output_file}. Defaults to FALSE.}
 \description{
 Get template biomarker rules file
 }
+\keyword{internal}

@@ -2,7 +2,7 @@
 #' @param output_file Path to output file. The template will be copied to this path.
 #' @param overwrite If TRUE and `output_file` exists, this function will
 #' overwrite the contents of `output_file`. Defaults to FALSE.
-#' @export
+#' @keywords internal 
 get_biomarker_rules_template <- function(
   output_file = "biomarker_rules_template.xlsx",
   overwrite = FALSE

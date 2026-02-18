@@ -1,11 +1,11 @@
-#' @title Translate biomarker scores from numerical to nominal
+#' @title Translate biomarker scores from 
+#' a deconvoluted TMA spreadsheet.
 #' @description This function translates numerical scores of biomarkers to nominal scores.
-#' @param biomarkers_file Path to the Excel file containing biomarker data.
-#' @param biomarker_rules_file Path to spreadsheet containing the translation rules for all biomarkers.
-#' It must contain a sheet named "translation" with columns
-#' "biomarker", "original_score", "translated_score".
-#' @param output_file Optional path to the output file. If NULL, the function will not save the output.
+#' @param biomarkers_file Path to the Excel file containing biomarker data (ie, output from `deconvolute()`).
+#' @param output_file Optional path to the output file,
+#' which can be used as input to `consolidate_scores()`.
 #' @return A data frame with translated biomarker scores.
+#' @inheritParams tmatools
 #' @export
 #' @examples
 #' library(TMAtools)
@@ -14,12 +14,14 @@
 #' # define output files
 #' combined_tma_file <- "combined_tma.xlsx"
 #' deconvoluted_tma_file <- "deconvoluted_tma.xlsx"
-#' consolidated_tma_file <- "consolidated_tma.xlsx"
+#' translated_tma_file <- "translated_tma.xlsx"
 #'
 #' # combine TMA datasets
 #' combine_tma_spreadsheets(
 #'  tma_dir = tma_dir,
-#'  output_file = combined_tma_file
+#'  output_file = combined_tma_file,
+#'  biomarker_sheet_index = 2,
+#'  valid_biomarkers = c("ER", "p53") # optional, but recommended to avoid misspelling errors
 #' )
 #'
 #' # deconvolute combined TMA dataset
@@ -27,14 +29,18 @@
 #'    tma_file = combined_tma_file,
 #'    output_file = deconvoluted_tma_file
 #' )
+#' 
+#' # grab biomarker rules file
+#' biomarker_rules_file <- system.file("extdata", "biomarker_rules_example.xlsx",  package = "TMAtools")
 #'
-#' # translate numerical biomarker scores to nominal scores
-#' # and consolidate them for each case
-#' consolidated_data <- translate_and_consolidate_scores(
-#'   biomarkers_file = deconvoluted_tma_file,
-#'   required_biomarkers = c("ER", "TP53")
+#' # translate numerical scores to nominal scores
+#' translated_data <- translate_scores(
+#'    biomarkers_file = deconvoluted_tma_file,
+#'    biomarker_rules_file = biomarker_rules_file,
+#'    output_file = translated_tma_file
 #' )
-#' head(consolidated_data)
+#'
+#' print(translated_data)
 translate_scores <- function(
   biomarkers_file,
   biomarker_rules_file = NULL,
@@ -179,7 +185,7 @@ translate_scores <- function(
 #' It must contain a sheet named "translation" with columns
 #' "biomarker", "original_score", "translated_score".
 #' @return data.frame with the translation rules.
-#' @export
+#' @keywords internal
 get_translation_dictionary <- function(biomarker_rules_file) {
   if (!file.exists(biomarker_rules_file)) {
     cli::cli_abort(paste0(

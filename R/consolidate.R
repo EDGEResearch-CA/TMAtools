@@ -1,14 +1,18 @@
-#' @title Consolidate biomarkers
+#' @title Consolidate biomarkers from a translated TMA spreadsheet.
 #' @description This function consolidates biomarker scores for each case.
-#' @param biomarkers_file Path to the Excel file containing biomarker data.
-#' @param biomarker_rules_file Path to spreadsheet containing the consolidation rules for all biomarkers.
-#' It must contain a sheet named "consolidation" with columns
-#' "biomarker", "rule_type", "rule_value", "consolidated_value".
+#' @param biomarkers_file Path to the Excel file containing biomarker data (ie, output from `translate_scores()`).
 #' @param output_file Optional path to the output file. If NULL, the function will not save the output.
-#' @param biomarkers_data Optinally, pass a data.frame or tibble with biomarker data
-#' instead of passing `biomarkers_file`. Used during re-consolidation in `tmatools()`.
-#' @param late_na_ok If TRUE, NA values do not trigger error. Used during re-consolidation in `tmatools()`.
-#' @return A data frame with translated biomarker scores.
+#' @param biomarkers_data Optinally, pass a `data.frame` or `tibble` with biomarker data
+#' instead of passing `biomarkers_file`. Used during re-consolidation in `tmatools()`
+#' (usually not needed by end users).
+#' @param late_na_ok If TRUE, NA values do not trigger error. Used during re-consolidation in `tmatools()`
+#' (usually not needed by end users). Defaults to FALSE, which triggers an error if any NA is present in the scores to be consolidated.
+#' @return A data frame with consolidated biomarker scores.
+#' @inheritParams tmatools
+#' @details 
+#' The consolidation of individual scores will be placed in new columns with the same name as the biomarker but without the ".c1", ".c2" etc suffixes.
+#' For instance, if the biomarker is "ER", the consolidated score will be placed
+#' in a new column named "er" (lowercase). The original columns with the ".c1", ".c2" etc suffixes will be retained in the output.
 #' @export
 #' @examples
 #' library(TMAtools)
@@ -23,7 +27,9 @@
 #' # combine TMA datasets
 #' combine_tma_spreadsheets(
 #'  tma_dir = tma_dir,
-#'  output_file = combined_tma_file
+#'  output_file = combined_tma_file,
+#'  biomarker_sheet_index = 2,
+#'  valid_biomarkers = c("ER", "p53") # optional, but recommended to avoid misspelling errors
 #' )
 #'
 #' # deconvolute combined TMA dataset
@@ -31,20 +37,24 @@
 #'    tma_file = combined_tma_file,
 #'    output_file = deconvoluted_tma_file
 #' )
+#' 
+#' # grab biomarker rules file
+#' biomarker_rules_file <- system.file("extdata", "biomarker_rules_example.xlsx",  package = "TMAtools")
 #'
 #' # translate numerical scores to nominal scores
 #' translate_scores(
 #'    biomarkers_file = deconvoluted_tma_file,
-#'    biomarker_rules_file = "tmp/biomarker_rules.xlsx",
+#'    biomarker_rules_file = biomarker_rules_file,
 #'    output_file = translated_tma_file
 #' )
 #'
 #' # and consolidate nominal scores for each case
-#' consolidated_data <- translate_and_consolidate_scores(
-#'   biomarkers_file = deconvoluted_tma_file,
-#'   required_biomarkers = c("ER", "TP53")
+#' consolidated_data <- consolidate_scores(
+#'   biomarkers_file = translated_tma_file,
+#'   output_file = consolidated_tma_file,
+#'   biomarker_rules_file = biomarker_rules_file
 #' )
-#' head(consolidated_data)
+#' print(consolidated_data)
 consolidate_scores <- function(
   biomarkers_file = NULL,
   biomarker_rules_file = NULL,
@@ -162,6 +172,7 @@ consolidate_scores <- function(
 #' @param biomarker_rules_file Path to spreadsheet containing the consolidation rules for all biomarkers.
 #' It must contain a sheet named "consolidation" with columns
 #' "biomarker", "rule_type", "rule_value", "consolidated_value".
+#' @keywords internal
 #' @return a data.frame of consolidation rules for each biomarker.
 get_consolidation_rules_df <- function(biomarker_rules_file) {
   if (!file.exists(biomarker_rules_file)) {
@@ -220,9 +231,10 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
 #' @title Assess consolidated score per patient
 #' @param rules_df data.frame with consolidation rules for a single biomarker
 #' @param scores character vector with all scores for a given biomarker/patient
-#' @param unknow_values character vector with values treated as unknown.
+#' @param unknow_values character vector with values treated as unknown. Defaults to `c("Unk", "x")`.
 #' @param late_na_ok If TRUE, NAs do not trigger error. Used for re-consolidation.
-#' Defaults to `c("Unk", "x")`.
+#' @inheritParams consolidate_scores
+#' @keywords internal
 #' @return consolidated value (as character).
 consolidate_single_patient <- function(
   rules_df,
