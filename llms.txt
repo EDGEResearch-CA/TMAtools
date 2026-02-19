@@ -146,6 +146,12 @@ You can explore an example in the file
 [`inst/extdata/tma1/example_metadata.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/tma1_clean_map.xlsx)
 on GitHub.
 
+## Bugs
+
+If you find any bugs, please report them at the TMAtools [issue
+tracker](https://github.com/EDGEResearch-CA/TMAtools/issues). We
+appreciate it, thank you very much!
+
 # Package index
 
 ## Main function
