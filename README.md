@@ -112,3 +112,6 @@ An Excel file with "metadata" in the name. In a single tab, it must contain at l
 columns with additional metadata (e.g., age, sex, histotype, block number), which will be carried forward to your output files.
 
 You can explore an example in the file [`inst/extdata/tma1/example_metadata.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/tma1_clean_map.xlsx) on GitHub.
+
+## Bugs
+If you find any bugs, please report them at the TMAtools [issue tracker](https://github.com/EDGEResearch-CA/TMAtools/issues). We appreciate it, thank you very much!
