@@ -1,4 +1,4 @@
-# TMAtools
+# ![TMAtools overview fig.](man/figures/hexsticker.png)TMAtools
 
 <!-- badges: start -->
 
