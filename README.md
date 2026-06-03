@@ -1,9 +1,10 @@
-
 # TMAtools
 
 <!-- badges: start -->
+
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15447743.svg)](https://doi.org/10.5281/zenodo.15447743)
+
 <!-- badges: end -->
 
 The goal of TMAtools is to facilitate the efficient and reproducible processing and integration of TMA data at scale.
@@ -18,7 +19,7 @@ Documentation and examples are available at [edgeresearch-ca.github.io/TMAtools]
 
 You can install the development version of TMAtools from [GitHub](https://github.com/EDGEResearch-CA/TMAtools) with:
 
-``` r
+```r
 # install.packages("remotes")
 remotes::install_github("EDGEResearch-CA/TMAtools")
 ```
@@ -32,7 +33,7 @@ Here, we use the `system.file()` function to grab the path to the
 `tma1` and `tma2` folders. For your own data, please replace `tma_dirs`
 with the path to your own TMA(s).
 
-``` r
+```r
 library(TMAtools)
 # 2 example folders with TMA files (which come with TMAtools)
 tma_dirs <- c(
@@ -65,7 +66,7 @@ To process your own data, `TMAtools` requires two main inputs: a **biomarker rul
 
 Excel file containing translation and consolidation rules. It must be placed outside TMA folders. Column names should match the template file [`inst/extdata/biomarker_rules_example.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_example.xlsx) (download the raw file from GitHub to explore in Excel). You can create a copy of this file for your own customization with the code below.
 
-``` r
+```r
 example_rules <- system.file(
   "extdata", "biomarker_rules_example.xlsx",
   package = "TMAtools"
@@ -80,7 +81,7 @@ contains translation and consolidation rules for 19 different biomarkers applied
 Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your
 own customization with the code below.
 
-``` r
+```r
 enoc_rules <- system.file(
   "extdata", "biomarker_rules_enoc.xlsx",
   package = "TMAtools"
@@ -114,4 +115,5 @@ columns with additional metadata (e.g., age, sex, histotype, block number), whic
 You can explore an example in the file [`inst/extdata/tma1/example_metadata.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/tma1_clean_map.xlsx) on GitHub.
 
 ## Bugs
+
 If you find any bugs, please report them at the TMAtools [issue tracker](https://github.com/EDGEResearch-CA/TMAtools/issues). We appreciate it, thank you very much!
