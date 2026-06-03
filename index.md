@@ -1,4 +1,4 @@
-# TMAtools
+# ![TMAtools overview fig.](reference/figures/hexsticker.png)TMAtools
 
 The goal of TMAtools is to facilitate the efficient and reproducible
 processing and integration of TMA data at scale.
