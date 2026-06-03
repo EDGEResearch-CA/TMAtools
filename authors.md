@@ -19,7 +19,7 @@ Source:
 Ribeiro de Souza B, Okada Akhlaghi H, Netto Flores Cruz G, EDGE Research
 Lab (2025). *TMAtools: processing and integration of Tissue Microarray
 (TMA) data at scale*.
-[doi:10.5281/zenodo.15447743](https://doi.org/10.5281/zenodo.15447743),
+[doi:10.5281/zenodo.15447743](https://doi.org/10.5281/zenodo.15447743).
 R package (latest), <https://edgeresearch-ca.github.io/TMAtools>.
 
     @Manual{,

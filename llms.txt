@@ -18,6 +18,7 @@ You can install the development version of TMAtools from
 [GitHub](https://github.com/EDGEResearch-CA/TMAtools) with:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("EDGEResearch-CA/TMAtools")
 ```
@@ -32,6 +33,7 @@ grab the path to the `tma1` and `tma2` folders. For your own data,
 please replace `tma_dirs` with the path to your own TMA(s).
 
 ``` r
+
 library(TMAtools)
 # 2 example folders with TMA files (which come with TMAtools)
 tma_dirs <- c(
@@ -71,6 +73,7 @@ placed outside TMA folders. Column names should match the template file
 a copy of this file for your own customization with the code below.
 
 ``` r
+
 example_rules <- system.file(
   "extdata", "biomarker_rules_example.xlsx",
   package = "TMAtools"
@@ -88,6 +91,7 @@ Carcinomas. You can create a copy of this file for your own
 customization with the code below.
 
 ``` r
+
 enoc_rules <- system.file(
   "extdata", "biomarker_rules_enoc.xlsx",
   package = "TMAtools"
