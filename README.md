@@ -1,4 +1,6 @@
-# ![TMAtools overview fig.](man/figures/hexsticker.png)TMAtools
+<img src="man/figures/hexsticker.png" align="left" height="139"/>
+
+# TMAtools
 
 <!-- badges: start -->
 
@@ -6,6 +8,10 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15447743.svg)](https://doi.org/10.5281/zenodo.15447743)
 
 <!-- badges: end -->
+
+</br>
+</br>
+</br>
 
 The goal of TMAtools is to facilitate the efficient and reproducible processing and integration of TMA data at scale.
 
