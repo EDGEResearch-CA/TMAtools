@@ -1,13 +1,10 @@
-<div style="display: flex; align-items: center; gap: 20px;">
+<div align="center">
   <img src="man/figures/hexsticker.png" height="139"/>
-  <div>
 
-# TMAtools
+  # TMAtools
 
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15447743.svg)](https://doi.org/10.5281/zenodo.15447743)
-
-  </div>
+  [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15447743.svg)](https://doi.org/10.5281/zenodo.15447743)
 </div>
 
 The goal of TMAtools is to facilitate the efficient and reproducible processing and integration of TMA data at scale.
