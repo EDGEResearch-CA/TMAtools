@@ -9,7 +9,7 @@ template:
     pkgdown-nav-height: 100px
 navbar:
   structure:
-    left:  [reference, edgelab]
+    left:  [reference, edgelab, poster]
     right: [search, github, lightswitch]
   components:
     edgelab:
@@ -17,6 +17,10 @@ navbar:
       href: https://www.edgeresearch.ca
       target: _blank
       icon: fa-microscope
+    poster:
+      text: "Poster"
+      href: tmatools_poster.pdf
+      target: _blank
 reference:
 - title: "Main function"
   desc: >

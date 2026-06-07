@@ -1,7 +1,7 @@
 <div align="center">
   <img src="man/figures/hexsticker.png" height="139"/>
 
-  # TMAtools
+  <h1>TMAtools</h1>
 
   [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
   [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.15447743-blue)](https://doi.org/10.5281/zenodo.15447743)
