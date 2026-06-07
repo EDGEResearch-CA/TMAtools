@@ -4,7 +4,7 @@
   # TMAtools
 
   [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15447743.svg)](https://doi.org/10.5281/zenodo.15447743)
+  [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.15447743-blue)](https://doi.org/10.5281/zenodo.15447743)
 </div>
 
 The goal of TMAtools is to facilitate the efficient and reproducible processing and integration of TMA data at scale.
