@@ -1,6 +1,7 @@
 url: https://edgeresearch-ca.github.io/tmatools
 home:
   title: "TMAtools"
+  logo: ~
 template:
   bootstrap: 5
   bslib:
