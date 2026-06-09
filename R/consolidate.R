@@ -2,7 +2,7 @@
 #' @description This function consolidates biomarker scores for each case.
 #' @param biomarkers_file Path to the Excel file containing biomarker data (ie, output from `translate_scores()`).
 #' @param output_file Optional path to the output file. If NULL, the function will not save the output.
-#' @param biomarkers_data Optinally, pass a `data.frame` or `tibble` with biomarker data
+#' @param biomarkers_data Optionally, pass a `data.frame` or `tibble` with biomarker data
 #' instead of passing `biomarkers_file`. Used during re-consolidation in `tmatools()`
 #' (usually not needed by end users).
 #' @param late_na_ok If TRUE, NA values do not trigger error. Used during re-consolidation in `tmatools()`
@@ -86,14 +86,14 @@ consolidate_scores <- function(
   # if a required biomarker is missing a placeholder column will be created and named as biomarker.c0
 
   for (biomarker_name in required_biomarkers) {
-    doest_not_contain_biomarker_name <- !any(
+    does_not_contain_biomarker_name <- !any(
       stringr::str_detect(
         colnames(biomarkers_data),
         stringr::fixed(biomarker_name, ignore_case = TRUE)
       )
     ) # does not matter if the biomarker name in the columns is uppercase or lowercase
 
-    if (doest_not_contain_biomarker_name) {
+    if (does_not_contain_biomarker_name) {
       message(paste0(
         "Adding placeholder column for biomarker ",
         biomarker_name
