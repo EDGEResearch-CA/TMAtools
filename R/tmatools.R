@@ -104,7 +104,7 @@ tmatools <- function(
   }
   if (length(in_cons_but_not_in_trans) > 0) {
     msg <- paste0(
-      "Biomarkers in consolidaton but not in translation rules: ",
+      "Biomarkers in consolidation but not in translation rules: ",
       paste0(in_cons_but_not_in_trans, collapse = ", ")
     )
     cli::cli_abort(msg)
