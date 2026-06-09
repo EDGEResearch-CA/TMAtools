@@ -30,7 +30,7 @@
 #' @param final_tma_file The name of the final file containing the consolidated scores from multiple TMAs processed.
 #' @param biomarker_sheet_index The index of the biomarker sheet in the TMA file.
 #' All TMA files must have the biomarker data in the same sheet index. Defaults to 2 (ie, second sheet).
-#' @return NULL
+#' @return A data frame with consolidated biomarker scores from all processed TMAs.
 #' @export
 #' @examples
 #' library(TMAtools)
