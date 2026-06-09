@@ -22,7 +22,7 @@ It must not be located within any of the TMA directories being processed.}
 
 \item{output_file}{Optional path to the output file. If NULL, the function will not save the output.}
 
-\item{biomarkers_data}{Optinally, pass a \code{data.frame} or \code{tibble} with biomarker data
+\item{biomarkers_data}{Optionally, pass a \code{data.frame} or \code{tibble} with biomarker data
 instead of passing \code{biomarkers_file}. Used during re-consolidation in \code{tmatools()}
 (usually not needed by end users).}
 
