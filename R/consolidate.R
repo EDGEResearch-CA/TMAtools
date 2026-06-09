@@ -210,7 +210,7 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
       biomarker_sub_df <- consolidation_df[
         consolidation_df$biomarker == biomarker,
       ]
-      no_else <- all(biomarker_sub_df$rule_type != "else")
+      no_else <- all(biomarker_sub_df$rule_type != "else", na.rm = TRUE)
       no_quant <- !any(biomarker_sub_df$rule_type %in% c("mean"))
       if (no_else && no_quant) {
         cli::cli_abort(
