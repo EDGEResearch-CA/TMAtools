@@ -5,7 +5,19 @@
 #' - If at least one of MSH6, PMS2 is unknown (i.e., "Unk"), MMR status is 'Unk'.
 #' - If all of MSH6, PMS2 are present and none of MSH6, PMS2, MLH1, MSH2 is absent,
 #'   MMR status is 'intact'.
-#' @keywords internal
+#' @return A data frame with an additional column "mmr_ihc_4" containing the MMR status ("deficient", "intact", or "Unk") for each row.
+#' @export
+#' @examples
+#' library(TMAtools)
+#' # create example biomarker data
+#' example_data <- data.frame(
+#'   mlh1 = c("present", "absent", "present"),
+#'   msh2 = c("present", "present", "present"),
+#'   msh6 = c("present", "present", "Unk"),
+#'   pms2 = c("present", "present", "present"),
+#'   stringsAsFactors = FALSE
+#' )
+#' assess_mmr_status(example_data)
 assess_mmr_status <- function(biomarkers_data) {
   mmr_biomarkers <- c("mlh1", "msh2", "msh6", "pms2") # lowercase since using post-consolidation columns
   missing_biomarkers <- setdiff(mmr_biomarkers, colnames(biomarkers_data))
