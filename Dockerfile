@@ -1,6 +1,8 @@
 FROM rocker/tidyverse:4.5.0
 
-RUN R -e 'install.packages(c("languageserver"))'
+# Install R package dependencies for TMAtools
+RUN R -e 'install.packages(c("readxl", "writexl", "languageserver"), repos = "https://cloud.r-project.org/")'
+
 RUN R -e 'remotes::install_github("nx10/httpgd")'
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
