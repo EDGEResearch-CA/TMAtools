@@ -77,9 +77,11 @@ translate_scores <- function(
     does_not_contain_biomarker_name <- !any(
       stringr::str_detect(
         colnames(biomarkers_data),
-        stringr::fixed(biomarker_name)
+        stringr::fixed(biomarker_name, ignore_case = TRUE)
       )
-    ) # does not matter if the biomarker name in the columns is uppercase or lowercase
+    )
+    # fixed: added ignore_case to match consolidate.R (prevents data corruption
+    # when score sheet tab names differ in case from rules file)
 
     if (does_not_contain_biomarker_name) {
       message(
@@ -94,7 +96,7 @@ translate_scores <- function(
     biomarker_columns <- colnames(biomarkers_data)[
       stringr::str_detect(
         colnames(biomarkers_data),
-        paste0(biomarker_name, "\\.c\\d+")
+        stringr::regex(paste0(biomarker_name, "\\.c\\d+"), ignore_case = TRUE)
       )
     ]
     unique_scores <- unique(unlist(biomarkers_data[, biomarker_columns]))
@@ -134,7 +136,7 @@ translate_scores <- function(
     biomarkers_data <- biomarkers_data |>
       dplyr::mutate(
         dplyr::across(
-          dplyr::matches(paste0(biomarker_name, "\\.c\\d+")),
+          dplyr::matches(paste0(biomarker_name, "\\.c\\d+"), ignore.case = TRUE),
           ~ {
             dict <- translation_dict[[biomarker_name]]
             if (!("Unk" %in% names(dict))) {
