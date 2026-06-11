@@ -73,7 +73,7 @@ file.copy(example_rules, "biomarker_rules_example_copy.xlsx")
 
 #### Full template for IHC biomarkers and customization
 
-TMAtools also includes another rules template file called [`inst/extdata/biomarker_rules_enoc.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_enoc.xlsx), which contains translation and consolidation rules for 19 different biomarkers applied to studying Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your own customization with the code below.
+TMAtools also includes another rules template file called [`inst/extdata/biomarker_rules_enoc.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_enoc.xlsx), which contains translation and consolidation rules for 22 different biomarkers applied to studying Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your own customization with the code below.
 
 ```r
 enoc_rules <- system.file(

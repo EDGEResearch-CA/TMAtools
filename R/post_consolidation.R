@@ -38,8 +38,7 @@ assess_mmr_status <- function(biomarkers_data) {
       mlh1 <- single_row["mlh1"]
       msh2 <- single_row["msh2"]
       if (all(c(msh6, pms2, mlh1, msh2) == "Unk")) {
-        # if at least one of MSH6, PMS2, MLH1, MSH2 is absent,
-        # MMR status is 'deficient'
+        # if all four biomarkers are unknown, MMR status is 'Unk'
         return("Unk")
       } else if (any(c(msh6, pms2, mlh1, msh2) == "absent")) {
         # if at least one of MSH6, PMS2, MLH1, MSH2 is absent,
