@@ -2,12 +2,12 @@ citHeader("To cite package 'TMAtools' in publications, please use:")
 
 citEntry(
   entry = "Manual",
-  title = "TMAtools: processing and integration of Tissue Microarray (TMA) data at scale.",
+  title = "TMAtools: processing and integration of Tissue Microarray (TMA) data at scale",
   author = c(
     person("Bianca", "Ribeiro de Souza", email = "bianca.ribeiro@ubc.ca", role = c("aut", "cre")),
     person("Hannah", "Okada Akhlaghi", role = "ctb"),
-    person("", "Endometriosis Oncogenomics and Pathology Research Lab", role = c("cph", "fnd")),
-    person("Giuliano", "Netto Flores Cruz", role = "ctb")
+    person("Giuliano", "Netto Flores Cruz", role = "ctb"),
+    person("", "EDGE Research Lab", role = c("cph", "fnd"))
   ),
   year = 2025,
   note = "R package (latest)",

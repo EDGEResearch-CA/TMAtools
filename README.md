@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 MD036 MD041 MD045 -->
+
 <div align="center">
   <img src="man/figures/hexsticker.png" height="139"/>
 
@@ -26,12 +28,7 @@ remotes::install_github("EDGEResearch-CA/TMAtools")
 
 ## Example
 
-This is a basic example that comes with the package,
-containing two independent TMAs (`tma1` and `tma2`).
-The data from each TMA is located within a separate folder.
-Here, we use the `system.file()` function to grab the path to the
-`tma1` and `tma2` folders. For your own data, please replace `tma_dirs`
-with the path to your own TMA(s).
+This is a basic example that comes with the package, containing two independent TMAs (`tma1` and `tma2`). The data from each TMA is located within a separate folder. Here, we use the `system.file()` function to grab the path to the `tma1` and `tma2` folders. For your own data, please replace `tma_dirs` with the path to your own TMA(s).
 
 ```r
 library(TMAtools)
@@ -40,7 +37,7 @@ tma_dirs <- c(
  system.file("extdata", "tma1", package = "TMAtools"),
  system.file("extdata", "tma2", package = "TMAtools")
 )
-# If using your own data, raplace tma_dirs definition, eg:
+# If using your own data, replace tma_dirs definition, eg:
 # tma_dirs <- "C:/Users/JaneDoe/Documents/my_tma"
 
 # spreadsheet with translation and consolidation rules
@@ -76,10 +73,7 @@ file.copy(example_rules, "biomarker_rules_example_copy.xlsx")
 
 #### Full template for IHC biomarkers and customization
 
-TMAtools also includes another rules template file called [`inst/extdata/biomarker_rules_enoc.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_enoc.xlsx), which
-contains translation and consolidation rules for 19 different biomarkers applied to studying
-Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your
-own customization with the code below.
+TMAtools also includes another rules template file called [`inst/extdata/biomarker_rules_enoc.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_enoc.xlsx), which contains translation and consolidation rules for 22 different biomarkers applied to studying Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your own customization with the code below.
 
 ```r
 enoc_rules <- system.file(
@@ -109,10 +103,9 @@ You can explore an example in the file [`inst/extdata/tma1/tma1_clean_map.xlsx`]
 
 #### Metadata
 
-An Excel file with "metadata" in the name. In a single tab, it must contain at least two columns: "core_id" (core IDs that appear in the sector map) and "accession_id" (case or patient identifiers). Optionally, you can add other
-columns with additional metadata (e.g., age, sex, histotype, block number), which will be carried forward to your output files.
+An Excel file with "metadata" in the name. In a single tab, it must contain at least two columns: "core_id" (core IDs that appear in the sector map) and "accession_id" (case or patient identifiers). Optionally, you can add other columns with additional metadata (e.g., age, sex, histotype, block number), which will be carried forward to your output files.
 
-You can explore an example in the file [`inst/extdata/tma1/example_metadata.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/tma1_clean_map.xlsx) on GitHub.
+You can explore an example in the file [`inst/extdata/tma1/example_metadata.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/example_metadata.xlsx) on GitHub.
 
 ## Bugs
 

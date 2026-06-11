@@ -16,7 +16,21 @@ assess_mmr_status(biomarkers_data)
 MMR status is 'intact'.
 }}
 }
+\value{
+A data frame with an additional column "mmr_ihc_4" containing the MMR status ("deficient", "intact", or "Unk") for each row.
+}
 \description{
 Assess MMR status based on IHC biomarker scores
 }
-\keyword{internal}
+\examples{
+library(TMAtools)
+# create example biomarker data
+example_data <- data.frame(
+  mlh1 = c("present", "absent", "present"),
+  msh2 = c("present", "present", "present"),
+  msh6 = c("present", "present", "Unk"),
+  pms2 = c("present", "present", "present"),
+  stringsAsFactors = FALSE
+)
+assess_mmr_status(example_data)
+}

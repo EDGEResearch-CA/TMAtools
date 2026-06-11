@@ -55,6 +55,9 @@ It must not be located within any of the TMA directories being processed.}
 \item{biomarker_sheet_index}{The index of the biomarker sheet in the TMA file.
 All TMA files must have the biomarker data in the same sheet index. Defaults to 2 (ie, second sheet).}
 }
+\value{
+A data frame with consolidated biomarker scores from all processed TMAs.
+}
 \description{
 This function runs the TMAtools pipeline for multiple TMA directories.
 It combines TMA datasets, deconvolutes the combined dataset,

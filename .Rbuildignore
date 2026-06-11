@@ -4,6 +4,12 @@
 ^docs$
 ^pkgdown$
 ^LICENSE\.md$
-^.venv$
+^\.venv$
 ^tmp$
 ^\.github$
+^\.devcontainer$
+^Dockerfile$
+^\.gitignore$
+^image$
+^CITATION$
+^inst/scratch\.r$
