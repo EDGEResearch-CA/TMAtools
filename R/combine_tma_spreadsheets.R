@@ -4,7 +4,7 @@
 #' that can be used for deconvolution with `TMAtools::deconvolute()`.
 #' @param tma_dir A path to a single TMA directory, which must contain:
 #' - `Score sheets`: one or more Excel files with biomarker scores (one biomarker per sheet).
-#' - `Clean map`: an Excel file with "clean_map" in the file name. 
+#' - `Clean map`: an Excel file with "clean_map" in the file name.
 #' This file corresponds to the sector map of your TMA that only contains
 #' the core IDs within the corresponding cells. No other annotation outside
 #' the map is allowed, as `TMAtools` uses the exact positions of core IDs
@@ -55,7 +55,6 @@ combine_tma_spreadsheets <- function(
   clean_map_ix <- grepl("clean_map", tma_files, ignore.case = TRUE)
 
   stopifnot("FATAL - missing TMA clean map" = any(clean_map_ix))
-  stopifnot("FATAL - missing metadata" = any(meta_ix))
   stopifnot("FATAL - more than one TMA clean map" = sum(clean_map_ix) == 1)
   stopifnot("FATAL - more than one metadata" = sum(meta_ix) == 1)
 
@@ -68,7 +67,21 @@ combine_tma_spreadsheets <- function(
   biomarker_sheet_names <- sapply(
     tma_files,
     function(file) {
-      readxl::excel_sheets(file)[biomarker_sheet_index]
+      .available_sheets <- readxl::excel_sheets(file)
+      if (length(.available_sheets) < biomarker_sheet_index) {
+        msg <- paste0(
+          "FATAL - {.strong biomarker_sheet_index=",
+          biomarker_sheet_index,
+          "} (the ",
+          biomarker_sheet_index,
+          "th sheet)",
+          " doesn't exist in the TMA file: {.file ",
+          file,
+          "}. Please check the TMA file above and whether the {.strong biomarker_sheet_index} value is correct."
+        )
+        cli::cli_abort(msg)
+      }
+      .available_sheets[biomarker_sheet_index]
     }
   )
 
