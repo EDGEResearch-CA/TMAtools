@@ -248,6 +248,16 @@ get_consolidation_rules_df <- function(biomarker_rules_file) {
       paste0(missing_cols, collapse = ", ")
     ))
   }
+  consolidation_df <- .sanitize_rules_df(
+    consolidation_df,
+    file_path = biomarker_rules_file,
+    columns = c("biomarker", "rule_type", "rule_value", "consolidated_value")
+  )
+  consolidation_df <- consolidation_df[
+    !is.na(consolidation_df$biomarker) & trimws(consolidation_df$biomarker) != "",
+    ,
+    drop = FALSE
+  ]
   biomarkers <- unique(consolidation_df$biomarker)
   for (biomarker in biomarkers) {
     if (biomarker != "all") {

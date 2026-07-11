@@ -225,6 +225,16 @@ get_translation_dictionary <- function(biomarker_rules_file) {
 
   # select only required columns
   dict_df <- dict_df[, required_columns]
+  dict_df <- .sanitize_rules_df(
+    dict_df,
+    file_path = biomarker_rules_file,
+    columns = required_columns
+  )
+  dict_df <- dict_df[
+    !is.na(dict_df$biomarker) & trimws(dict_df$biomarker) != "",
+    ,
+    drop = FALSE
+  ]
 
   .dict <- lapply(
     split(dict_df, dict_df$biomarker),
