@@ -65,7 +65,9 @@ tmatools <- function(
       cli::cli_abort("Directory does not exist: ", tma_dir)
     }
   }
-  stopifnot(file.exists(biomarker_rules_file))
+  if (!file.exists(biomarker_rules_file)) {
+    cli::cli_abort(paste0("Biomarker rules file does not exist: ", biomarker_rules_file))
+  }
   dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
   combined_prefix <- tools::file_path_sans_ext(
     basename(combined_tma_file)
@@ -128,6 +130,7 @@ tmatools <- function(
     metadata_file <- list.files(
       path = tma_dir,
       pattern = "*metadata*",
+      ignore.case = TRUE,
       full.names = TRUE
     )
     if (length(metadata_file) == 0) {

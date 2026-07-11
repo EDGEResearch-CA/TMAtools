@@ -80,7 +80,9 @@ consolidate_scores <- function(
     }
   }
 
-  stopifnot(inherits(biomarkers_data, "data.frame"))
+  if (!inherits(biomarkers_data, "data.frame")) {
+    cli::cli_abort("`biomarkers_data` must be a data frame.")
+  }
 
   for (biomarker_name in required_biomarkers) {
     has_col <- any(stringr::str_detect(
