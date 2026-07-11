@@ -376,17 +376,17 @@ tmatools <- function(
       biomarker
     ) |>
     dplyr::filter(!is.na(value)) |>
-    dplyr::mutate(
-      biomarker_core = paste0(
-        biomarker,
-        ".c",
-        dplyr::row_number()
-      ),
-      dplyr::across(
-        dplyr::all_of(setdiff(non_biomarker_columns, "accession_id")),
-        function(x) paste0(unique(x), collapse = ";")
-      )
-    ) |>
+      dplyr::mutate(
+        biomarker_core = paste0(
+          biomarker,
+          ".c",
+          dplyr::row_number()
+        ),
+        dplyr::across(
+          dplyr::all_of(setdiff(non_biomarker_columns, "accession_id")),
+          function(x) paste0(sort(unique(x)), collapse = ";")
+        )
+      ) |>
     dplyr::ungroup() |>
     tidyr::pivot_wider(
       id_cols = dplyr::all_of(non_biomarker_columns),

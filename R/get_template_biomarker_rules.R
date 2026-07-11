@@ -12,5 +12,13 @@ get_biomarker_rules_template <- function(
     "biomarker_rules_enoc.xlsx",
     package = "TMAtools"
   )
-  invisible(file.copy(template_path, output_file, overwrite = overwrite))
+  copied <- file.copy(template_path, output_file, overwrite = overwrite)
+  if (!copied) {
+    cli::cli_abort(paste0(
+      "Could not copy template biomarker rules file to ",
+      output_file,
+      ". Check destination path and write permissions."
+    ))
+  }
+  invisible(copied)
 }

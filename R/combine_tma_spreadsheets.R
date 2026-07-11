@@ -58,13 +58,10 @@ combine_tma_spreadsheets <- function(
   if (!any(clean_map_ix)) {
     cli::cli_abort("FATAL - missing TMA clean map")
   }
-  if (!any(meta_ix)) {
-    cli::cli_abort("FATAL - missing metadata")
-  }
   if (sum(clean_map_ix) != 1) {
     cli::cli_abort("FATAL - more than one TMA clean map")
   }
-  if (sum(meta_ix) != 1) {
+  if (sum(meta_ix) > 1) {
     cli::cli_abort("FATAL - more than one metadata")
   }
 

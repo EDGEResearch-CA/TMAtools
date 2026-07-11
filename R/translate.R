@@ -93,11 +93,11 @@ translate_scores <- function(
       biomarkers_data[[paste0(biomarker_name, ".c0")]] <- "Unk"
     }
     # check if all TMA cores are covered by the dictionary
+    biomarker_prefix <- paste0(tolower(biomarker_name), ".c")
+    all_cols <- tolower(colnames(biomarkers_data))
     biomarker_columns <- colnames(biomarkers_data)[
-      stringr::str_detect(
-        colnames(biomarkers_data),
-        stringr::regex(paste0(biomarker_name, "\\.c\\d+"), ignore_case = TRUE)
-      )
+      grepl("\\.c\\d+$", all_cols) &
+        startsWith(all_cols, biomarker_prefix)
     ]
     unique_scores <- unique(unlist(biomarkers_data[, biomarker_columns]))
     original_scores <- names(translation_dict[[biomarker_name]])
@@ -136,7 +136,13 @@ translate_scores <- function(
     biomarkers_data <- biomarkers_data |>
       dplyr::mutate(
         dplyr::across(
-          dplyr::matches(paste0(biomarker_name, "\\.c\\d+"), ignore.case = TRUE),
+          dplyr::all_of({
+            prefix <- paste0(tolower(biomarker_name), ".c")
+            cols <- tolower(colnames(biomarkers_data))
+            colnames(biomarkers_data)[
+              grepl("\\.c\\d+$", cols) & startsWith(cols, prefix)
+            ]
+          }),
           ~ {
             dict <- translation_dict[[biomarker_name]]
             if (!("Unk" %in% names(dict))) {
