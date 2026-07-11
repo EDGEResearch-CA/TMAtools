@@ -45,6 +45,11 @@ combine_tma_spreadsheets <- function(
   valid_biomarkers = NULL,
   tma_name = NULL
 ) {
+  if (!is.numeric(biomarker_sheet_index) || length(biomarker_sheet_index) != 1L ||
+      is.na(biomarker_sheet_index) || biomarker_sheet_index < 1L || biomarker_sheet_index %% 1 != 0L) {
+    cli::cli_abort("FATAL - biomarker_sheet_index must be a positive integer (>= 1).")
+  }
+
   tma_files <- list.files(
     path = tma_dir,
     pattern = "\\.xls[x]?$",
