@@ -62,7 +62,7 @@ tmatools <- function(
 ) {
   for (tma_dir in tma_dirs) {
     if (!dir.exists(tma_dir)) {
-      cli::cli_abort("Directory does not exist: ", tma_dir)
+      cli::cli_abort(paste0("Directory does not exist: ", tma_dir))
     }
   }
   if (!file.exists(biomarker_rules_file)) {
@@ -129,22 +129,23 @@ tmatools <- function(
     )
     metadata_file <- list.files(
       path = tma_dir,
-      pattern = "*metadata*",
-      ignore.case = TRUE,
       full.names = TRUE
     )
+    metadata_file <- metadata_file[
+      grepl("metadata", basename(metadata_file), ignore.case = TRUE)
+    ]
     if (length(metadata_file) == 0) {
-      cli::cli_abort("No metadata file found in: ", tma_dir)
+      cli::cli_abort(paste0("No metadata file found in: ", tma_dir))
     }
     if (length(metadata_file) > 1) {
-      cli::cli_abort("Multiple metadata files found in: ", tma_dir)
+      cli::cli_abort(paste0("Multiple metadata files found in: ", tma_dir))
     }
     metadata <- readxl::read_excel(metadata_file[1], sheet = 1)
     if (!all(c("core_id", "accession_id") %in% colnames(metadata))) {
-      cli::cli_abort(
+      cli::cli_abort(paste0(
         "Metadata file missing some of the required columns (core_id, accession_id): ",
         metadata_file[1]
-      )
+      ))
     }
     # keep track of new metadata columns
     metadata_columns <- c(

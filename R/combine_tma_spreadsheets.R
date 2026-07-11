@@ -48,6 +48,7 @@ combine_tma_spreadsheets <- function(
   tma_files <- list.files(
     path = tma_dir,
     pattern = "\\.xls[x]?$",
+    ignore.case = TRUE,
     full.names = TRUE
   )
   # filter out metadata files
