@@ -15,10 +15,24 @@ jobs:
     timeout-minutes: 30
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CI: true
+      R_LIBS_USER: ${{ github.workspace }}/.R/library
+      R_TESTS: ""
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Pre-flight deterministic environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${{ github.workspace }}/.R/library"
+          mkdir -p "${{ runner.temp }}/tmatools-ci"
+          echo "TMPDIR=${{ runner.temp }}/tmatools-ci" >> "${GITHUB_ENV}"
+          rm -rf "${{ github.workspace }}/.Rcheck" "${{ github.workspace }}/tmatools_output"
 
       - name: Set up Pandoc
         uses: r-lib/actions/setup-pandoc@v2
