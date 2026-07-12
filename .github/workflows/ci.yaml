@@ -51,7 +51,22 @@ jobs:
       - name: R CMD check
         uses: r-lib/actions/check-r-package@v2
         with:
-          args: 'c("--no-manual", "--as-cran")'
+          args: "--no-manual --as-cran"
 
       - name: Run testthat
-        run: Rscript -e 'testthat::test_local()'
+        shell: bash
+        run: |
+          set -euo pipefail
+          Rscript -e 'testthat::test_local()' 2>&1 | tee testthat-local.log
+
+      - name: Archive CI diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-fail-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            ./check/**
+            ./**/*.Rcheck/**
+            ./testthat-local.log
