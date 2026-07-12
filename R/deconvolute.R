@@ -136,7 +136,13 @@ deconvolute <- function(
   ordered_cols <- c(
     first_columns,
     unlist(lapply(biomarker_names, function(b) {
-      sort(grep(paste0("^", b, "\\.c[0-9]+$"), col_names, value = TRUE))
+      biomarker_prefix <- paste0(tolower(b), ".c")
+      b_cols <- col_names[startsWith(tolower(col_names), biomarker_prefix)]
+      if (length(b_cols) == 0L) {
+        return(character(0))
+      }
+      replicate_idx <- suppressWarnings(as.integer(gsub(".*\\.c", "", b_cols)))
+      b_cols[order(replicate_idx, na.last = TRUE)]
     }))
   )
 
