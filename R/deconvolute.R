@@ -12,8 +12,6 @@
 #' @description Reads TMA spreadsheet from `tma_file`
 #' which must contain one "TMA map" sheet and one or more
 #' biomarker-specific sheets.
-#'
-#' @return A data frame with the deconvoluted data.
 #' @details 
 #' The function will
 #' match core IDs from the TMA map sheet
@@ -31,6 +29,7 @@
 #' If there are no values for a given core ID in a
 #' biomarker-specific sheet, the corresponding
 #' columns will all be filled with `NA`.
+#' @return A data frame with the deconvoluted data.
 #' @export
 #' @examples
 #' library(TMAtools)
@@ -75,75 +74,84 @@ deconvolute <- function(
     .name_repair = "minimal"
   )
   names(spreadsheets) <- sheet_names
-  tma_map <- spreadsheets[["TMA map"]]
-
-  core_ids <- unique(na.omit(unlist(tma_map)))
+  tma_map <- as.matrix(spreadsheets[["TMA map"]])
   biomarker_names <- sheet_names[sheet_names != "TMA map"]
-  results <- setNames(
-    lapply(vector("list", length(core_ids)), \(...) list()),
-    core_ids
+
+  n_grid <- nrow(tma_map) * ncol(tma_map)
+  core_flat <- as.character(unlist(tma_map))
+  pos_df <- data.frame(
+    pos = seq_len(n_grid),
+    core_id = core_flat,
+    stringsAsFactors = FALSE
   )
-  for (core_id in core_ids) {
-    core_ix <- !is.na(tma_map) & tma_map == core_id
-    for (biomarker_name in biomarker_names) {
-      biomarker_values <- spreadsheets[[biomarker_name]][
-        seq_len(nrow(tma_map)),
-        seq_len(ncol(tma_map)),
-        drop = FALSE
-      ]
-      biomarker_values <- biomarker_values[core_ix]
-      if (length(biomarker_values) == 0L) {
-        biomarker_values <- c("c1" = NA)
-      } else {
-        names(biomarker_values) <- paste0(
-          "c",
-          seq_along(biomarker_values)
-        )
-      }
-      results[[core_id]][[biomarker_name]] <- list(biomarker_values)
-    }
-  }
-  deconvoluted_results <- dplyr::bind_rows(results, .id = "core_id") |>
-    tidyr::pivot_longer(
-      -core_id,
-      names_to = "biomarker_name",
-      values_to = "value"
-    ) |>
-    tidyr::unnest_wider(value) |>
+  pos_df <- pos_df[!is.na(pos_df$core_id), , drop = FALSE]
+
+  bm_list <- lapply(biomarker_names, function(b) {
+    data.frame(
+      pos = seq_len(n_grid),
+      biomarker_name = b,
+      value = as.character(unlist(spreadsheets[[b]][
+        seq_len(nrow(tma_map)), seq_len(ncol(tma_map))
+      ])),
+      stringsAsFactors = FALSE
+    )
+  })
+  bm_long <- dplyr::bind_rows(bm_list)
+
+  all_core_ids <- unique(pos_df$core_id)
+
+  merged <- merge(pos_df, bm_long, by = "pos", all = FALSE)
+  merged <- merged[, setdiff(colnames(merged), "pos"), drop = FALSE]
+
+  merged <- merged |>
+    dplyr::group_by(core_id, biomarker_name) |>
+    dplyr::mutate(ck = paste0("c", dplyr::row_number())) |>
+    dplyr::ungroup() |>
     tidyr::pivot_wider(
-      names_from = "biomarker_name",
-      values_from = dplyr::matches("^c[0-9]+$"),
-      names_glue = "{biomarker_name}.{.value}",
+      id_cols = core_id,
+      names_from = c(biomarker_name, ck),
+      values_from = value,
+      names_sep = "."
     )
 
   first_columns <- "core_id"
   if (!is.null(tma_id)) {
-    deconvoluted_results$tma_id <- tma_id # create new column with tma id (name of the folder)
+    merged$tma_id <- tma_id
     first_columns <- c(first_columns, "tma_id")
   }
 
-  col_names <- colnames(deconvoluted_results)
+  missing_ids <- setdiff(all_core_ids, merged$core_id)
+  if (length(missing_ids) > 0L) {
+    missing_df <- as.data.frame(
+      matrix(NA_character_, nrow = length(missing_ids), ncol = ncol(merged)),
+      stringsAsFactors = FALSE
+    )
+    colnames(missing_df) <- colnames(merged)
+    missing_df$core_id <- as.character(missing_ids)
+    if (!is.null(tma_id)) missing_df$tma_id <- tma_id
+    merged <- dplyr::bind_rows(merged, missing_df)
+  }
+
+  col_names <- colnames(merged)
   ordered_cols <- c(
     first_columns,
-    unlist(
-      lapply(
-        biomarker_names,
-        function(b) {
-          sort(grep(
-            paste0("^", b, "\\.c[0-9]+$"),
-            col_names,
-            value = TRUE
-          ))
-        }
-      )
-    )
+    unlist(lapply(biomarker_names, function(b) {
+      biomarker_prefix <- paste0(tolower(b), ".c")
+      b_cols <- col_names[startsWith(tolower(col_names), biomarker_prefix)]
+      if (length(b_cols) == 0L) {
+        return(character(0))
+      }
+      replicate_idx <- suppressWarnings(as.integer(gsub(".*\\.c", "", b_cols)))
+      b_cols[order(replicate_idx, na.last = TRUE)]
+    }))
   )
 
-  deconvoluted_results <- deconvoluted_results[, ordered_cols]
-  # left join with metadata
+  merged <- merged[, ordered_cols, drop = FALSE]
+
   if (!is.null(metadata)) {
-    deconvoluted_results <- dplyr::left_join(
-      deconvoluted_results,
+    metadata$core_id <- as.character(metadata$core_id)
+    merged <- dplyr::left_join(
+      merged,
       metadata |> dplyr::select(core_id, accession_id, dplyr::everything()),
       by = "core_id"
     ) |>
@@ -155,12 +163,8 @@ deconvolute <- function(
   }
 
   if (!is.null(output_file)) {
-    writexl::write_xlsx(
-      deconvoluted_results,
-      path = output_file,
-      col_names = TRUE
-    )
-    return(invisible(deconvoluted_results))
+    writexl::write_xlsx(merged, path = output_file, col_names = TRUE)
+    return(invisible(merged))
   }
-  return(invisible(deconvoluted_results))
+  return(invisible(merged))
 }

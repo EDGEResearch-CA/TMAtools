@@ -45,24 +45,38 @@ combine_tma_spreadsheets <- function(
   valid_biomarkers = NULL,
   tma_name = NULL
 ) {
+  if (!is.numeric(biomarker_sheet_index) || length(biomarker_sheet_index) != 1L ||
+      is.na(biomarker_sheet_index) || biomarker_sheet_index < 1L || biomarker_sheet_index %% 1 != 0L) {
+    cli::cli_abort("FATAL - biomarker_sheet_index must be a positive integer (>= 1).")
+  }
+
   tma_files <- list.files(
     path = tma_dir,
     pattern = "\\.xls[x]?$",
+    ignore.case = TRUE,
     full.names = TRUE
   )
   # filter out metadata files
   meta_ix <- grepl("metadata", tma_files, ignore.case = TRUE)
   clean_map_ix <- grepl("clean_map", tma_files, ignore.case = TRUE)
 
-  stopifnot("FATAL - missing TMA clean map" = any(clean_map_ix))
-  stopifnot("FATAL - more than one TMA clean map" = sum(clean_map_ix) == 1)
-  stopifnot("FATAL - more than one metadata" = sum(meta_ix) == 1)
+  if (!any(clean_map_ix)) {
+    cli::cli_abort("FATAL - missing TMA clean map")
+  }
+  if (sum(clean_map_ix) != 1) {
+    cli::cli_abort("FATAL - more than one TMA clean map")
+  }
+  if (sum(meta_ix) > 1) {
+    cli::cli_abort("FATAL - more than one metadata")
+  }
 
   tma_map_file <- tma_files[clean_map_ix]
 
   tma_files <- tma_files[!meta_ix & !clean_map_ix]
 
-  stopifnot("FATAL - missing score sheets" = length(tma_files) > 0)
+  if (length(tma_files) == 0) {
+    cli::cli_abort("FATAL - missing score sheets")
+  }
 
   biomarker_sheet_names <- sapply(
     tma_files,

@@ -19,7 +19,7 @@ navbar:
       icon: fa-microscope
     poster:
       text: "Poster"
-      href: tmatools_poster.pdf
+      href: https://raw.githubusercontent.com/EDGEResearch-CA/TMAtools/master/pkgdown/assets/tmatools_poster.pdf
       target: _blank
 reference:
 - title: "Main function"
@@ -35,3 +35,8 @@ reference:
   - deconvolute
   - translate_scores
   - consolidate_scores
+- title: "Post-consolidation analysis"
+  desc: >
+    Functions for downstream analysis of consolidated TMA data.
+  contents:
+  - assess_mmr_status

@@ -30,7 +30,7 @@
 #' @param final_tma_file The name of the final file containing the consolidated scores from multiple TMAs processed.
 #' @param biomarker_sheet_index The index of the biomarker sheet in the TMA file.
 #' All TMA files must have the biomarker data in the same sheet index. Defaults to 2 (ie, second sheet).
-#' @return NULL
+#' @return A data frame with consolidated biomarker scores from all processed TMAs.
 #' @export
 #' @examples
 #' library(TMAtools)
@@ -62,10 +62,12 @@ tmatools <- function(
 ) {
   for (tma_dir in tma_dirs) {
     if (!dir.exists(tma_dir)) {
-      cli::cli_abort("Directory does not exist: ", tma_dir)
+      cli::cli_abort(paste0("Directory does not exist: ", tma_dir))
     }
   }
-  stopifnot(file.exists(biomarker_rules_file))
+  if (!file.exists(biomarker_rules_file)) {
+    cli::cli_abort(paste0("Biomarker rules file does not exist: ", biomarker_rules_file))
+  }
   dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
   combined_prefix <- tools::file_path_sans_ext(
     basename(combined_tma_file)
@@ -104,7 +106,7 @@ tmatools <- function(
   }
   if (length(in_cons_but_not_in_trans) > 0) {
     msg <- paste0(
-      "Biomarkers in consolidaton but not in translation rules: ",
+      "Biomarkers in consolidation but not in translation rules: ",
       paste0(in_cons_but_not_in_trans, collapse = ", ")
     )
     cli::cli_abort(msg)
@@ -127,21 +129,23 @@ tmatools <- function(
     )
     metadata_file <- list.files(
       path = tma_dir,
-      pattern = "*metadata*",
       full.names = TRUE
     )
+    metadata_file <- metadata_file[
+      grepl("metadata", basename(metadata_file), ignore.case = TRUE)
+    ]
     if (length(metadata_file) == 0) {
-      cli::cli_abort("No metadata file found in: ", tma_dir)
+      cli::cli_abort(paste0("No metadata file found in: ", tma_dir))
     }
     if (length(metadata_file) > 1) {
-      cli::cli_abort("Multiple metadata files found in: ", tma_dir)
+      cli::cli_abort(paste0("Multiple metadata files found in: ", tma_dir))
     }
     metadata <- readxl::read_excel(metadata_file[1], sheet = 1)
     if (!all(c("core_id", "accession_id") %in% colnames(metadata))) {
-      cli::cli_abort(
+      cli::cli_abort(paste0(
         "Metadata file missing some of the required columns (core_id, accession_id): ",
         metadata_file[1]
-      )
+      ))
     }
     # keep track of new metadata columns
     metadata_columns <- c(
@@ -372,17 +376,17 @@ tmatools <- function(
       biomarker
     ) |>
     dplyr::filter(!is.na(value)) |>
-    dplyr::mutate(
-      biomarker_core = paste0(
-        biomarker,
-        ".c",
-        dplyr::row_number()
-      ),
-      dplyr::across(
-        dplyr::all_of(setdiff(non_biomarker_columns, "accession_id")),
-        function(x) paste0(unique(x), collapse = ";")
-      )
-    ) |>
+      dplyr::mutate(
+        biomarker_core = paste0(
+          biomarker,
+          ".c",
+          dplyr::row_number()
+        ),
+        dplyr::across(
+          dplyr::all_of(setdiff(non_biomarker_columns, "accession_id")),
+          function(x) paste0(sort(unique(x)), collapse = ";")
+        )
+      ) |>
     dplyr::ungroup() |>
     tidyr::pivot_wider(
       id_cols = dplyr::all_of(non_biomarker_columns),

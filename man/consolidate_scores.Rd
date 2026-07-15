@@ -22,7 +22,7 @@ It must not be located within any of the TMA directories being processed.}
 
 \item{output_file}{Optional path to the output file. If NULL, the function will not save the output.}
 
-\item{biomarkers_data}{Optinally, pass a \code{data.frame} or \code{tibble} with biomarker data
+\item{biomarkers_data}{Optionally, pass a \code{data.frame} or \code{tibble} with biomarker data
 instead of passing \code{biomarkers_file}. Used during re-consolidation in \code{tmatools()}
 (usually not needed by end users).}
 
@@ -42,9 +42,7 @@ in a new column named "er" (lowercase). The original columns with the ".c1", ".c
 }
 \examples{
 library(TMAtools)
-# grab folder with example TMA datasets
 tma_dir <- system.file("extdata", "tma1", package = "TMAtools")
-# define output files
 combined_tma_file <- "combined_tma.xlsx"
 deconvoluted_tma_file <- "deconvoluted_tma.xlsx"
 translated_tma_file <- "translated_tma.xlsx"
@@ -52,29 +50,32 @@ consolidated_tma_file <- "consolidated_tma.xlsx"
 
 # combine TMA datasets
 combine_tma_spreadsheets(
- tma_dir = tma_dir,
- output_file = combined_tma_file,
- biomarker_sheet_index = 2,
- valid_biomarkers = c("ER", "p53") # optional, but recommended to avoid misspelling errors
+  tma_dir = tma_dir,
+  output_file = combined_tma_file,
+  biomarker_sheet_index = 2,
+  valid_biomarkers = c("ER", "p53")
 )
 
 # deconvolute combined TMA dataset
 deconvolute(
-   tma_file = combined_tma_file,
-   output_file = deconvoluted_tma_file
+  tma_file = combined_tma_file,
+  output_file = deconvoluted_tma_file
 )
 
 # grab biomarker rules file
-biomarker_rules_file <- system.file("extdata", "biomarker_rules_example.xlsx",  package = "TMAtools")
+biomarker_rules_file <- system.file(
+  "extdata", "biomarker_rules_example.xlsx",
+  package = "TMAtools"
+)
 
 # translate numerical scores to nominal scores
 translate_scores(
-   biomarkers_file = deconvoluted_tma_file,
-   biomarker_rules_file = biomarker_rules_file,
-   output_file = translated_tma_file
+  biomarkers_file = deconvoluted_tma_file,
+  biomarker_rules_file = biomarker_rules_file,
+  output_file = translated_tma_file
 )
 
-# and consolidate nominal scores for each case
+# consolidate nominal scores for each case
 consolidated_data <- consolidate_scores(
   biomarkers_file = translated_tma_file,
   output_file = consolidated_tma_file,
