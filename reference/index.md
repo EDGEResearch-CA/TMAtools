@@ -19,3 +19,10 @@ Each major step in the TMAtools pipeline.
   : Translate biomarker scores from a deconvoluted TMA spreadsheet.
 - [`consolidate_scores()`](https://edgeresearch-ca.github.io/tmatools/reference/consolidate_scores.md)
   : Consolidate biomarkers from a translated TMA spreadsheet.
+
+## Post-consolidation analysis
+
+Functions for downstream analysis of consolidated TMA data.
+
+- [`assess_mmr_status()`](https://edgeresearch-ca.github.io/tmatools/reference/assess_mmr_status.md)
+  : Assess MMR status based on IHC biomarker scores

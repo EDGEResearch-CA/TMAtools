@@ -81,6 +81,10 @@ tmatools(
   have the biomarker data in the same sheet index. Defaults to 2 (ie,
   second sheet).
 
+## Value
+
+A data frame with consolidated biomarker scores from all processed TMAs.
+
 ## Examples
 
 ``` r

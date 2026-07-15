@@ -17,7 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://www.edgeresearch.ca" target="_blank"><span class="fa fa-microscope"></span> EDGE Research Lab</a></li>
-<li class="nav-item"><a class="nav-link" href="../tmatools_poster.pdf" target="_blank">Poster</a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/EDGEResearch-CA/TMAtools/master/pkgdown/assets/tmatools_poster.pdf" target="_blank">Poster</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/EDGEResearch-CA/TMAtools/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -56,7 +56,29 @@ MMR status is 'intact'.</p></li>
 </ul></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A data frame with an additional column "mmr_ihc_4" containing the MMR status ("deficient", "intact", or "Unk") for each row.</p>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://edgeresearch-ca.github.io/TMAtools" class="external-link">TMAtools</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># create example biomarker data</span></span></span>
+<span class="r-in"><span><span class="va">example_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  mlh1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"present"</span>, <span class="st">"absent"</span>, <span class="st">"present"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  msh2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"present"</span>, <span class="st">"present"</span>, <span class="st">"present"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  msh6 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"present"</span>, <span class="st">"present"</span>, <span class="st">"Unk"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  pms2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"present"</span>, <span class="st">"present"</span>, <span class="st">"present"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">assess_mmr_status</span><span class="op">(</span><span class="va">example_data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      mlh1    msh2    msh6    pms2 mmr_ihc_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 present present present present    intact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  absent present present present deficient</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 present present     Unk present       Unk</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

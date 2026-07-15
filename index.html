@@ -38,7 +38,7 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://www.edgeresearch.ca" target="_blank"><span class="fa fa-microscope"></span> EDGE Research Lab</a></li>
-<li class="nav-item"><a class="nav-link" href="tmatools_poster.pdf" target="_blank">Poster</a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/EDGEResearch-CA/TMAtools/master/pkgdown/assets/tmatools_poster.pdf" target="_blank">Poster</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -87,7 +87,7 @@ TMAtools
 <span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tma1"</span>, package <span class="op">=</span> <span class="st">"TMAtools"</span><span class="op">)</span>,</span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"tma2"</span>, package <span class="op">=</span> <span class="st">"TMAtools"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co"># If using your own data, raplace tma_dirs definition, eg:</span></span>
+<span><span class="co"># If using your own data, replace tma_dirs definition, eg:</span></span>
 <span><span class="co"># tma_dirs &lt;- "C:/Users/JaneDoe/Documents/my_tma"</span></span>
 <span></span>
 <span><span class="co"># spreadsheet with translation and consolidation rules</span></span>
@@ -121,7 +121,7 @@ TMAtools
 <div class="section level4">
 <h4 id="full-template-for-ihc-biomarkers-and-customization">Full template for IHC biomarkers and customization<a class="anchor" aria-label="anchor" href="#full-template-for-ihc-biomarkers-and-customization"></a>
 </h4>
-<p>TMAtools also includes another rules template file called <a href="https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_enoc.xlsx" class="external-link"><code>inst/extdata/biomarker_rules_enoc.xlsx</code></a>, which contains translation and consolidation rules for 19 different biomarkers applied to studying Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your own customization with the code below.</p>
+<p>TMAtools also includes another rules template file called <a href="https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_enoc.xlsx" class="external-link"><code>inst/extdata/biomarker_rules_enoc.xlsx</code></a>, which contains translation and consolidation rules for 22 different biomarkers applied to studying Endometrioid and Clear Cell Ovarian Carcinomas. You can create a copy of this file for your own customization with the code below.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">enoc_rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">"extdata"</span>, <span class="st">"biomarker_rules_enoc.xlsx"</span>,</span>
@@ -151,7 +151,7 @@ TMAtools
 <h4 id="metadata">Metadata<a class="anchor" aria-label="anchor" href="#metadata"></a>
 </h4>
 <p>An Excel file with “metadata” in the name. In a single tab, it must contain at least two columns: “core_id” (core IDs that appear in the sector map) and “accession_id” (case or patient identifiers). Optionally, you can add other columns with additional metadata (e.g., age, sex, histotype, block number), which will be carried forward to your output files.</p>
-<p>You can explore an example in the file <a href="https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/tma1_clean_map.xlsx" class="external-link"><code>inst/extdata/tma1/example_metadata.xlsx</code></a> on GitHub.</p>
+<p>You can explore an example in the file <a href="https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/example_metadata.xlsx" class="external-link"><code>inst/extdata/tma1/example_metadata.xlsx</code></a> on GitHub.</p>
 </div>
 </div>
 </div>

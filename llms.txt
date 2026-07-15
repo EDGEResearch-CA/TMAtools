@@ -46,7 +46,7 @@ tma_dirs <- c(
  system.file("extdata", "tma1", package = "TMAtools"),
  system.file("extdata", "tma2", package = "TMAtools")
 )
-# If using your own data, raplace tma_dirs definition, eg:
+# If using your own data, replace tma_dirs definition, eg:
 # tma_dirs <- "C:/Users/JaneDoe/Documents/my_tma"
 
 # spreadsheet with translation and consolidation rules
@@ -91,7 +91,7 @@ file.copy(example_rules, "biomarker_rules_example_copy.xlsx")
 
 TMAtools also includes another rules template file called
 [`inst/extdata/biomarker_rules_enoc.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/biomarker_rules_enoc.xlsx),
-which contains translation and consolidation rules for 19 different
+which contains translation and consolidation rules for 22 different
 biomarkers applied to studying Endometrioid and Clear Cell Ovarian
 Carcinomas. You can create a copy of this file for your own
 customization with the code below.
@@ -153,7 +153,7 @@ age, sex, histotype, block number), which will be carried forward to
 your output files.
 
 You can explore an example in the file
-[`inst/extdata/tma1/example_metadata.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/tma1_clean_map.xlsx)
+[`inst/extdata/tma1/example_metadata.xlsx`](https://github.com/EDGEResearch-CA/TMAtools/blob/master/inst/extdata/tma1/example_metadata.xlsx)
 on GitHub.
 
 ## Bugs
@@ -183,4 +183,11 @@ Each major step in the TMAtools pipeline.
   : Translate biomarker scores from a deconvoluted TMA spreadsheet.
 - [`consolidate_scores()`](https://edgeresearch-ca.github.io/tmatools/reference/consolidate_scores.md)
   : Consolidate biomarkers from a translated TMA spreadsheet.
+
+## Post-consolidation analysis
+
+Functions for downstream analysis of consolidated TMA data.
+
+- [`assess_mmr_status()`](https://edgeresearch-ca.github.io/tmatools/reference/assess_mmr_status.md)
+  : Assess MMR status based on IHC biomarker scores
 
